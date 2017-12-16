@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{browser, react-15.0.1, react-bootstrap, react-dom-15.0.1, react-with-addons-0.13.1}" />
+  </component>
+</project>

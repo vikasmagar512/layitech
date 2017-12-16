@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Scan</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style type="text/css">
+/*
+.navbar {
+    color: white;
+    background-color: #337ab7;
+}*/
+div.col-sm-3 {
+    padding-left: 0px;
+}
+ul#login-ul {
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+ul#login-ul li {
+    margin-right: 5px;
+}
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: 30px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+div.modal-body ul#user_registration li {
+    padding: 5px 0;
+}
+div.modal-body div.row {
+   padding-bottom: 10px;
+}
+div.modal-header {
+   background-color: #337ab7;
+   color: white;
+}
+div.modal-header button {
+   color: white;
+}
+</style>
+<script>
+function logout() {
+  document.cookie = 'user' + '=; path = /; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  window.location.href = "/scan/logout";
+}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Web Application Vulnerability Testing</a>
+</div>
+
+<div class="navbar-header navbar-right">
+
+ <form action="/scan/login" method="post" class="form-inline"> 
+      <ul class="nav navbar-nav navbar-right" id="login-ul">
+        <li class="nav-item"><span>Username</span></li>
+        <li class="nav-item"><input type="text" name="username" value="abc@example.com" onfocus="if(this.value == 'abc@example.com') { this.value = ''; }"></li>
+        <li class="nav-item"><span>Password</span></li>
+        <li class="nav-item"><input type="password" name="password" value="password" onfocus="if(this.value == 'password') { this.value = ''; }"></li>
+        <li class="nav-item"><input type="submit" class="btn btn-primary" value="Login"></li>
+        <li class="nav-item"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newUser">Register</button></li>
+      </ul>
+  </form>
+
+</div>
+
+</div>
+<div class="row">
+<div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-default navbar-fixed-side">
+        <!-- normal collapsible navbar markup -->
+
+ <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+           <li class="nav-item "><a href="/scan/host">Host Info</a></li>
+           <li class="nav-item" ><a href="/scan/webserver">Check HTTP Server</a></li>
+            <!--<li class="nav-item"><a href="/scan/broken_links">Check Broken Links</a></li> -->
+            <!--<li class="nav-item "><a href="/scan/valid_html">Validate HTML</a></li>-->
+            <li class="nav-item "><a href="/scan/port_scan">Port Scan</a></li>
+            <li class="nav-item "><a href="/scan/nmap_scan">Ping Sweep</a></li>
+            <li class="nav-item "><a href="/scan/cross-site-scripting">Cross-Site Scripting</a></li>
+            <li class="nav-item "><a href="/scan/cross_site_req_forgery">Cross-Site Request Forgery</a></li>
+            <li class="nav-item active"><a href="/scan/access_control">Missing Function Level Access Control</a></li>
+            <!--<li class="nav-item "><a href="/scan/vuln_scan">Blind SQL Injection</a></li>-->
+            <li class="nav-item "><a href="/scan/api_handler">API Handler</a></li>
+            <li class="nav-item "><a href="/scan/sqlmap">Run SQLMap</a></li>
+            <li class="nav-item "><a href="/scan/kali_scan">Run Other Kali Vulnerability Tools</a></li>
+            <li class="nav-item "><a href="/scan/myjobs">My Jobs</a></li>
+        <li class="nav-item"><a href="/scan/help">Help</a></li>
+        </ul>
+
+</div>
+      </nav>
+    </div>
+
+<div class="col-sm-9">
+
+
+
+    <div class="form-group">
+      <h4>Compare Access Privilege between different Roles</h4>
+ <form id="access_form" action="" method="post" class="form-inline">
+     <div class="container">
+       <div class="row">
+     <label for="urlid" class="control-label">Login URL</label>
+     <input type="text" size="50" name="url" id="urlid" value="" placeholder="https://www.google.com" class="form-control">
+     <input type="hidden" name="url_id" value="" id="urlid1"/>
+     <input type="hidden" name=service" value="A7">
+     </div>
+     <div class="row">
+<!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#adminModal" id="adminmodalbutton">Add Admin Login Credentials</button>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#nonadminModal" id="nonadminmodalbutton">Add Non-Admin Login Credentials</button>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#nologinModal" id="nonadminmodalbutton">No Login Config</button>-->
+      </div>
+     <div class="row">&nbsp;</div>
+     <div class="row">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mainModal" id="mainmodalbutton">Add Login Credentials</button>
+     <input type="submit" class="btn btn-primary" value="Compare Access Privilege"/>
+     </div>
+
+     
+    </div>
+  </form>
+
+<script>
+crosssite = { currentstep: 1, limit: 4, edit_login: 0 };
+jQuery(document).ready(function() {
+  widget      = $(".step");
+  btnnext     = $(".next");
+  btnback     = $(".back"); 
+  btnsubmit   = $(".submit");
+
+  crosssite.limit = widget.length;
+ 
+  $('#mainModal').on('hidden.bs.modal', function () {
+    widget      = $(".step");
+    widget.not(':eq(0)').hide();
+    console.log('close event');
+    //current = 1; Not Needed, otherwise back button wont work
+  })
+  // Hide buttons according to the current step
+  hideButtons = function(){
+    console.log("Inside hide button: ", crosssite.currentstep, crosssite.limit);
+    $(".action").hide();
+
+    if(crosssite.currentstep < crosssite.limit) btnnext.show();
+    if(crosssite.currentstep > 1) btnback.show();
+    if (crosssite.currentstep == crosssite.limit) { btnnext.hide(); btnsubmit.show(); }
+  };
+  // Next button click action
+  btnnext.click(function(){
+  console.log("Inside next button: ", crosssite.currentstep);
+  if (crosssite.currentstep) {
+    if (!canClickNext(crosssite.currentstep)) return;
+  }
+  if(crosssite.currentstep < crosssite.limit){
+    widget.show();
+    widget.not(':eq('+(crosssite.currentstep++)+')').hide();
+  }
+  hideButtons();
+  })
+  // Back button click action
+  btnback.click(function(){
+  if(crosssite.currentstep > 1){
+    crosssite.currentstep = crosssite.currentstep - 2;
+    btnnext.trigger('click');
+  }
+  console.log("Inside back button: ", crosssite.currentstep);
+  hideButtons();
+  })      
+
+
+  jQuery("button#mainmodalbutton").click(function() {
+    if (!(is_valid_url(jQuery("#urlid").val()))) {
+      alert('Enter a valid URL to scan');
+      return false;
+    }
+    crosssite.currentstep = 1;
+    console.log("Current: " + crosssite.currentstep);   
+    // Init buttons and UI
+    widget.not(':eq(0)').hide();
+    $(".step").eq(0).show();
+    hideButtons();
+  });
+});
+
+function canClickNext() {
+  if ( crosssite.currentstep == 1 ) {
+    return validate_login_role();
+  }
+  else if ( crosssite.currentstep == 2 ) {
+    return validateLoginType();
+  }
+  else if ( crosssite.currentstep == 3 ) {
+    return validateRedirectURL();
+  }
+}
+
+function validateRedirectURL() {
+ if (is_valid_url(jQuery("input[name=success_url]").val())) {
+    $('#successURLError').hide();
+    return true;
+  }
+  else {
+    $('#successURLError').show();
+    return false;
+  }
+ 
+}
+function validateLoginType() {
+  if (jQuery("input[name='login_type']:checked").val()) {
+    $('#loginTypeError').hide();
+    jQuery("#login-param-div").hide();
+    jQuery("#cookie-param-div").hide();
+    jQuery("#selenium-param-div").hide();
+    if ( jQuery("input[name='login_type']:checked").val() == 'Credentials') {
+      jQuery("#login-param-div").show();
+    }
+    else if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
+      jQuery("#cookie-param-div").show();
+    }
+    else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
+      jQuery("#selenium-param-div").show();
+    }
+    return true;
+  }
+  else {
+    $('#loginTypeError').show();
+    return false;
+  }
+}
+
+function validate_login_role() {
+  if (jQuery("input[name='userrole']:checked").val()) {
+    $('#step1-error').hide();
+    return true;
+  }
+  else {
+    $('#step1-error').show();
+    return false;
+  }
+}
+
+</script>
+<!-- Main Modal -->
+<div id="mainModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Login Credentials</h4>
+      </div>
+      <div class="modal-body">
+  <div class="addedLogin">
+    <ul id="addedLoginList" class="list-unstyled list-inline">
+
+      
+        
+        
+      
+   </ul>
+  </div>
+<div class="step 1 step1">
+Role for which you are adding Login Credentials
+<div class="alert alert-danger fade in" id="step1-error" style="display: none;">Please select a role</div>
+<div class="radio">
+  <label><input type="radio" name="userrole" value="admin">Admin</label>
+</div>
+<div class="radio">
+  <label><input type="radio" name="userrole" value="non_admin">Non Admin</label>
+</div>
+<div class="radio">
+  <label><input type="radio" name="userrole" value="custom_role_1">Custom Role 1</label>
+</div>
+<div class="radio">
+  <label><input type="radio" name="userrole" value="custom_role_2">Custom Role 2</label>
+</div>
+<div class="radio">
+  <label><input type="radio" name="userrole" value="no_login">No Login</label>
+</div>
+</div>
+
+<div class="step 2 step2">
+Login Type
+<div class="alert alert-danger fade in" id="loginTypeError" style="display: none;">Please select login type</div>
+<div class="radio">
+  <label><input type="radio" name="login_type" value="Credentials">Username / Password</label>
+</div>
+<div class="radio">
+  <label><input type="radio" name="login_type" value="Cookie">Cookie</label>
+</div>
+<div class="radio">
+  <label><input type="radio" name="login_type" value="Selenium">Selenium Xpath</label>
+</div>
+</div>
+<div class="step 3 step3">
+<div class="alert alert-danger fade in" id="successURLError" style="display: none;">Please enter valid success URL</div>
+URL if the user logged in successfully
+<input type="text" name="success_url" size="30" value="" class="form-control"/>
+</div>
+<div class="step 4 step4">
+<div id="login-param-div">
+<p>Add Login Parameters: ie the username and password to login to the site. </p>
+<p>Enter the name of the parameter in login form in the param field, Enter the value of the parameter in value field). For example if the username parameter is named username in login form, enter username in param field, and actual username value in value field.</p>
+<ul id="login-param-list" class="list-unstyled">
+<li>
+<label for="param1" class="control-label">Param 1</label>
+           <input type="text" size="10" name="param1" value="" class="form-control" id="param-1">
+           <label for="value1" class="control-label">Value 1</label>
+           <input type="text" size="10" name="value1" value="" class="form-control" id="value-1">
+</li>
+</div>
+
+<div id="cookie-param-div">
+<ul id="cookie-param-list" class="list-unstyled">
+      <li>
+           <label for="cookie_name" class="control-label">Cookie </label>
+           <input type="text" size="10" name="cookie_name1" value="" class="form-control" id="admin-cookie-name-">
+           <label for="admin_cookie_value" class="control-label">Value </label>
+           <input type="text" size="10" name="cookie_value1" value="" class="form-control" id="admin-cookie-value-">
+           <label for="admin_cookie_domain" class="control-label">Domain </label>
+           <input type="text" size="10" name="cookie_domain1" value="" class="form-control" id="admin-cookie-domain-">
+           <label for="admin_cookie_path" class="control-label">Path </label>
+           <input type="text" size="10" name="cookie_path1" value="" class="form-control" id="admin-cookie-path-">
+          </li>
+
+
+</ul>
+
+</div>
+<div id="selenium-param-div">
+<ul id="selenium-param-list" class="list-unstyled">
+<li><label for="sel_cmd11" class="control-label">Xpath 1</label><input type="text" size="10" name="sel_cmd1" id="sel-cmd1" value="" class="form-control"></li>
+</ul>
+</div>
+    <button type = "button" class = "btn btn-primary" id="add-param">Add More Param</button>
+     <button type = "button" class = "btn btn-primary" id="add-param-save">Save</button>
+    <button class="btn btn-primary" id="add-another-login" style="display:none">Add Another Login Credentials</button>
+</div>
+
+<!--     <ul type="none" id="admin-param-list1">
+<li>Login Type: 
+        <label class="radio-inline"><input type="radio" name="admin_login_type" value="Credentials" >Username / Password</label>
+        <label class="radio-inline"><input type="radio" name="admin_login_type" value="Cookie" >Cookie</label>
+        <label class="radio-inline"><input type="radio" name="admin_login_type" value="Selenium" >Selenium Xpath</label>
+        </li>
+          <li>Redirect URL if successfully logged in: <input type="text" name="admin_success_url" size="30" value="" class="form-control"/></li>
+          </ul>
+     <ul type="none" id="admin-param-list">
+        
+ 
+        
+      </ul> 
+    <button type = "button" class = "btn btn-primary" id="add-param-admin">Add Login Credentials</button>
+     <button type = "button" class = "btn btn-primary" id="add-param-admin-save">Save</button>-->
+      </div>
+      <div class="modal-footer">
+<button class="action back btn-primary">Back</button>
+    <button class="action next btn-primary" id="nextButton">Next</button>
+         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div id="adminModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Enter Login Credentials for Admin</h4>
+      </div>
+      <div class="modal-body">
+     <ul type="none" id="admin-param-list1">
+<li>Login Type: 
+        <label class="radio-inline"><input type="radio" name="admin_login_type" value="Credentials" >Username / Password</label>
+        <label class="radio-inline"><input type="radio" name="admin_login_type" value="Cookie" >Cookie</label>
+        <label class="radio-inline"><input type="radio" name="admin_login_type" value="Selenium" >Selenium Xpath</label>
+        </li>
+          <li>Redirect URL if successfully logged in: <input type="text" name="admin_success_url" size="30" value="" class="form-control"/></li>
+          </ul>
+     <ul type="none" id="admin-param-list">
+        
+ 
+        
+      </ul>
+     <button type = "button" class = "btn btn-primary" id="add-param-admin">Add Login Credentials</button>
+     <button type = "button" class = "btn btn-primary" id="add-param-admin-save">Save</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Non Admin Modal -->
+<div id="nonadminModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Enter Login Credentials for Non-Admin</h4>
+      </div>
+      <div class="modal-body">
+    <ul type="none" id="non-admin-param-list1">
+<li>Login Type:
+        <label class="radio-inline"><input type="radio" name="non_admin_login_type" value="Credentials" >Username / Password</label>
+        <label class="radio-inline"><input type="radio" name="non_admin_login_type" value="Cookie" >Cookie</label>
+        <label class="radio-inline"><input type="radio" name="non_admin_login_type" value="Selenium" >Selenium Xpath</label>
+        </li>
+          <li>Redirect URL if successfully logged in: <input type="text" name="non_admin_success_url" value="" size="30" class="form-control"/></li>
+          </ul>
+         </div>
+    <ul type="none" id="non-admin-param-list">
+        
+        
+ 
+     </ul>
+     <button type = "button" class = "btn btn-primary" id="add-param-non-admin">Add Login Credentials</button>
+     <button type = "button" class = "btn btn-primary" id="add-param-non-admin-save">Save</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="nologinModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Enter Login Credentials for Non-Admin</h4>
+      </div>
+      <div class="modal-body">
+    <ul type="none" id="no-login-param-list">
+         <li>Scan URL: <input type="text" name="no_login_success_url" value="" size="30" class="form-control"/>
+            <input type="hidden" value="No-Login" name="no_login_login_type"/>
+</li>
+          </ul>
+         </div>
+     <button type = "button" class = "btn btn-primary" id="no-login-save">Save</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+function is_valid_url(url) {
+    return /^(http(s)?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(url);
+}
+
+function is_param_valid() {
+  alert(jQuery("ul#admin-param-list li").length);
+  for(var i=1;i<=jQuery("ul#admin-param-list li").length;i++){
+    if (!(jQuery("input[name=param"+i+"]").val()) ) {
+      alert('Enter Param '+i);
+      return false;
+    }
+    if(!(jQuery("input[name=value"+i+"]").val()) ) {
+      alert('Enter Value for Param '+i);
+      return false;
+    }
+
+  }
+  return false;
+}
+
+function valid_params() {
+  if (!( jQuery("input[name=admin_login_type]").val() == 'Credentials' || jQuery("input[name=admin_login_type]").val() == 'Cookie' 
+     || jQuery("input[name=admin_login_type]").val() == 'Selenium' )) {
+    return false;
+  }
+
+  if( jQuery("input[name=admin_login_type]").val() == 'Credentials' ) {
+    if (!(valid_login_params())) {
+      return false;
+    }
+  }
+}
+
+function valid_login_params() {
+  if(!(valid_admin_login_params())){
+    return false;
+  }
+  return true;
+}
+
+function valid_admin_login_params() {
+  if ( !(jQuery("ul#admin-param-list li").length) ) {
+    return false;
+ }
+  for(var i=1;i<=jQuery("ul#admin-param-list li").length;i++){
+    if (!(jQuery("input[name=admin_param"+i+"]").val()) ) {
+      alert('Enter Param '+i);
+      return false;
+    }
+    if(!(jQuery("input[name=admin_value"+i+"]").val()) ) {
+      alert('Enter Value for Param '+i);
+      return false;
+    }
+
+  }
+  return true;  
+}
+function valid_non_admin_login_params() {
+  if ( !(jQuery("ul#non-admin-param-list li").length) ) {
+    return false;
+ }
+  for(var i=1;i<=jQuery("ul#non-admin-param-list li").length;i++){
+    if (!(jQuery("input[name=param"+i+"]").val()) ) {
+      alert('Enter Param '+i);
+      return false;
+    }
+    if(!(jQuery("input[name=value"+i+"]").val()) ) {
+      alert('Enter Value for Param '+i);
+      return false;
+    }
+
+  }
+  return true;  
+}
+</script>
+
+<script>
+jQuery(document).ready(function() {
+jQuery("#add-param-admin-save").click(function() {
+  if (!(jQuery("input#urlid").val()) ) {
+    alert('Enter the URL to scan');
+    return false;
+  }
+  if ( jQuery("input[name=admin_login_type]:checked").val() == "Credentials" ) {
+    if(valid_admin_login_params()) {
+       var hash = jQuery("ul#admin-param-list li input, ul#admin-param-list1 li input").serialize();
+       hash += '&role=admin&url='+jQuery("input#urlid").val()+'&url_id='+jQuery("input#urlid1").val();
+       //jQuery("ul#non-admin-param-list li input").each( function() { hash[this.name] = this.value;alert(this.name);alert(this.value); } );
+       jQuery.post("/scan/save_login", hash, function(data) {
+       if ( data.success) {
+         alert('The Login Credentials are saved');
+         jQuery("input#urlid1").val(data.scan_id);
+       }
+       else{
+         alert('The Login Credentials are not saved. Please try again.');
+       }
+     });
+    }
+  }
+  else if ( jQuery("input[name=admin_login_type]:checked").val() == "Cookie" ) {
+    var hash = jQuery("ul#admin-param-list li input, ul#admin-param-list1 li input").serialize();
+    hash += '&role=admin&url='+jQuery("input#urlid").val()+'&url_id='+jQuery("input#urlid1").val();
+    jQuery.post("/scan/save_login", hash, function(data) {
+       if ( data.success) {
+         alert('The Login Credentials are saved');
+         jQuery("input#urlid1").val(data.scan_id);
+       }
+       else{
+         alert('The Login Credentials are not saved. Please try again.');
+       }
+     }); 
+  }
+  else if (  jQuery("input[name=admin_login_type]:checked").val() == 'Selenium' ) {
+    var hash = jQuery("ul#admin-param-list li input, ul#admin-param-list1 li input").serialize();
+    hash += '&role=admin&url='+jQuery("input#urlid").val()+'&url_id='+jQuery("input#urlid1").val();
+    jQuery.post("/scan/save_login", hash, function(data) {
+       if ( data.success) {
+         alert('The Login Credentials are saved');
+         jQuery("input#urlid1").val(data.scan_id);
+       }
+       else{
+         alert('The Login Credentials are not saved. Please try again.');
+       }
+     }); 
+ 
+  }
+});
+
+jQuery("#no-login-save").click(function() {
+  var hash = jQuery("ul#no-login-param-list li input").serialize();
+  hash += '&role=no_login&url='+jQuery("input#urlid").val()+'&url_id='+jQuery("input#urlid1").val();
+  jQuery.post("/scan/save_login", hash, function(data) {
+    if ( data.success) {
+      alert('The Login Credentials are saved');
+    }
+    else {
+      alert('The Login Credentials are not saved. Please try again.');
+    }
+  });
+});
+
+jQuery("ul#addedLoginList").on('click', "button.edit_login", function() {
+  //alert(this.id);
+  var idValue = this.id;
+  idValue = idValue.replace('edit-', '');
+  alert(jQuery("input#"+idValue + "-login_type").val() );
+  var loginTypeValue1 = jQuery("input#"+idValue + "-login_type").val();
+  setLoginType(jQuery("input#"+idValue + "-login_type").val());
+  setUserRole(jQuery("input#"+idValue + "-userrole").val());
+  setSuccessURL(jQuery("input#"+idValue + "-success_url").val());
+  if ( loginTypeValue1 == 'Cookie' ) {
+    setCookieParams(idValue);
+  }
+  else if ( loginTypeValue1 == 'Credentials' ) {
+    setLoginParams(idValue);
+  }
+  else if ( loginTypeValue1 == 'Selenium' ) {
+    setSeleniumParams(idValue);
+  }
+  crosssite.edit_login = idValue.replace('login', '');
+});
+
+function setSeleniumParams(idValue) {
+  var selparamcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_sel_cmd"]').length;
+  for(var i =1; i<= selparamcount; i++ ) {
+    if ( jQuery("ul#selenium-param-list li").length < i ) addSeleniumParams();
+    jQuery("input[name=sel_cmd" + i + "]").val(jQuery("input#" + idValue + "-sel_cmd" + i).val());
+ }
+}
+
+function setLoginParams(idValue) {
+  var paramcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_param"]').length;
+  var loginParams = new Array('param', 'value');
+  for(var i =1; i<= paramcount; i++ ) {
+    if ( jQuery("ul#login-param-list li").length < i ) addCredentialsParams();
+    for(var j = 0; j < loginParams.length; j++) {
+      var paramName = loginParams[j] + i;
+      var paramValue = jQuery("input#" + idValue + "-" + loginParams[j] + i).val();
+      jQuery("input[name=" + paramName + "]").val(paramValue);
+    }
+  }
+
+}
+
+function setCookieParams(idValue) {
+  var cookieCount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_cookie_name"]').length;
+  //alert(cookieCount);
+  var cookieParams = new Array('cookie_name', 'cookie_value', 'cookie_domain', 'cookie_path');
+  for(var i = 1; i <= cookieCount; i++) {
+    if (jQuery("ul#cookie-param-list li").length < i ) addCookieParams();
+    for(var j = 0; j < cookieParams.length; j++) {
+      var paramName = cookieParams[j] + i;
+      var paramValue = jQuery("input#" + idValue + "-" + cookieParams[j] + i).val();
+      jQuery("input[name=" + paramName + "]").val(paramValue);
+    }  
+  }
+}
+
+function setLoginType(loginTypeValue) {
+  jQuery("input:radio[name='login_type']").filter("[value="+ loginTypeValue +"]").click();
+  return true;
+}
+
+function setUserRole(userRoleValue) {
+  jQuery("input:radio[name='userrole']").filter("[value="+ userRoleValue +"]").click();
+  return true;
+}
+
+function setSuccessURL(sucessURLValue){
+  jQuery("input[name='success_url']").val(sucessURLValue);
+  return true; 
+}
+
+jQuery("#add-param-save").click(function() {
+  var hash;
+  var logincount;
+  if ( jQuery("input[name='login_type']:checked").val() == 'Credentials' ) {
+    hash = jQuery("ul#login-param-list input, div.step1 input, div.step2 input, div.step3 input, input#urlid, input#urlid1, input[name=service]").serialize();
+  }
+  else if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
+    hash = jQuery("ul#cookie-param-list input, div.step1 input, div.step2 input, div.step3 input, input#urlid, input#urlid1, input[name=service]").serialize();
+  }
+  else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
+    hash = jQuery("ul#selenium-param-list input, div.step1 input, div.step2 input, div.step3 input, input#urlid, input#urlid1, input[name=service]").serialize();
+  }
+  if ( crosssite.edit_login ) {
+     logincount = crosssite.edit_login;
+  }
+  else {
+     logincount = jQuery("ul#addedLoginList li").length;
+     logincount++;
+     jQuery("ul#addedLoginList").append('<li><button type = "button" class = "btn btn-primary edit_login" id="edit-login' + logincount + '">Edit ' + jQuery("input[name='userrole']:checked").val()  + ' Login Credentials</button><div id="login' + logincount + '" style="disply:none"></div></li>');
+  }
+  jQuery("#add-another-login").show();
+
+  //store the parameters in div as hidden variables
+  if ( jQuery("input#login" + logincount + "-login_type").length == 0 ) {
+    jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-login_type', name: 'login' + logincount + '_login_type', value: jQuery("input[name='login_type']:checked").val() }).appendTo('#login' + logincount);
+  }
+  else {
+    jQuery("input#login" + logincount + "-login_type").val(jQuery("input[name='login_type']:checked").val());
+  }
+
+  if ( jQuery("input#login" + logincount + "-userrole").length == 0 ) {
+    jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-userrole', name: 'login' + logincount + '_userrole', value: jQuery("input[name='userrole']:checked").val() }).appendTo('#login'+ logincount);
+  }
+  else {
+    jQuery("input#login" + logincount + "-userrole").val(jQuery("input[name='userrole']:checked").val());
+  }
+
+  if ( jQuery("input#login" + logincount + "-success_url").length == 0 ) { 
+    jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-success_url', name: 'login' + logincount + '_success_url', value: jQuery("input[name='success_url']").val() }).appendTo('#login' + logincount);
+  }
+  else {
+   jQuery("input#login" + logincount + "-success_url").val(jQuery("input[name='success_url']").val());
+  }
+
+  if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
+    var paramcount = jQuery("ul#cookie-param-list li").length;
+    var cookieParams = new Array('cookie_name', 'cookie_value', 'cookie_domain', 'cookie_path');
+    for(var i= 1; i <= paramcount; i++) {
+      for(var j = 0; j < cookieParams.length; j++) {
+        if ( jQuery("input#login" + logincount + "-" + cookieParams[j] + i ).length == 0 ) { 
+          jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-'+ cookieParams[j] + i, name: 'login' + logincount + '_' + cookieParams[j] + i, value: jQuery("input[name=" + cookieParams[j] + i +"]").val() }).appendTo('#login' + logincount);
+        }
+        else {
+          jQuery("input#login" + logincount + "-" + cookieParams[j] + i ).val(jQuery("input[name=" + cookieParams[j] + i +"]").val());
+        }
+      }
+    }
+  }
+  else if ( jQuery("input[name='login_type']:checked").val() == 'Credentials' ) {
+    var paramcount = jQuery("ul#login-param-list li").length;
+    var loginParams = new Array('param', 'value');
+    for(var i= 1; i <= paramcount; i++) {
+      for(var j = 0; j < loginParams.length; j++) {
+        if ( jQuery("input#login" + logincount + "-" + loginParams[j] + i).length == 0 ) {
+          jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-'+ loginParams[j] + i, name: 'login' + logincount + '_' + loginParams[j] + i, value: jQuery("input[name=" + loginParams[j] + i +"]").val() }).appendTo('#login' + logincount);
+        }
+        else {
+          jQuery("input#login" + logincount + "-" + loginParams[j] + i).val(jQuery("input[name=" + loginParams[j] + i +"]").val());
+        }
+      }
+    }
+  }
+  else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
+    var paramcount = jQuery("ul#selenium-param-list li").length;
+    for(var i= 1; i <= paramcount; i++) {
+      if ( jQuery("input#login" + logincount + "-" + "-sel_cmd" + i ).length == 0 ) {
+        jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-sel_cmd'+ i, name: 'login' + logincount + '_sel_cmd' + i, value:  jQuery("input[name=sel_cmd" + i).val() }).appendTo('#login' + logincount);
+      }
+      else {
+        jQuery("input#login" + logincount + "-" + "-sel_cmd" + i ).val(jQuery("input[name=sel_cmd" + i).val());
+      }
+    }
+  }
+  //hash += '&url=' + jQuery("input#urlid").val() + '&url_id=' + jQuery("input#urlid1").val();
+  crosssite.edit_login = 0;
+  jQuery.post("/scan/save_loginnew", hash, function(data) {
+    if ( data.success) {
+      alert('The Login Credentials are saved');
+      jQuery("input#urlid1").val(data.scan_id);
+    }
+    else {
+      alert('The Login Credentials are not saved. Please try again.');
+    }
+  });
+
+  //alert( hash);
+});
+
+
+jQuery("#add-another-login").click(function() {
+  crosssite.currentstep = 1;
+  widget.not(':eq(0)').hide();
+  $(".step").eq(0).show();
+  hideButtons();
+});
+
+jQuery("#add-param-non-admin-save").click(function() {
+  if (!(jQuery("input#urlid").val()) ) {
+    alert('Enter the URL to scan');
+    return false;
+  }
+   var hash = jQuery("ul#non-admin-param-list li input, ul#non-admin-param-list1 li input").serialize();
+  hash += '&role=non_admin&url='+jQuery("input#urlid").val()+'&url_id='+jQuery("input#urlid1").val();
+  //jQuery("ul#non-admin-param-list li input").each( function() { hash[this.name] = this.value;alert(this.name);alert(this.value); } );
+  jQuery.post("/scan/save_login", hash, function(data) {
+    if ( data.success) {
+       alert('The Login Credentials are saved');
+       jQuery("input#urlid1").val(data.scan_id);
+    }
+    else{
+       alert('The Login Credentials are not saved. Please try again.');
+    }
+  });
+});
+
+jQuery("#add-cookie-param").click(function() {
+  var paramcount = jQuery("ul#param-list li").length + 1;
+  jQuery("ul#param-list").append('<li><label for="cookie_name' + paramcount + '1" class="control-label">Cookie ' + paramcount + '</label> <input type="text" size="10" name="cookie_name' + paramcount + '" id="cookie-name-'+paramcount+'" value="" class="form-control    "> <label for="cookie_value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label> <input type="text" size="10" name="cookie_value' + paramcount + '" id="cookie-value-' + paramcount + '" value="" class="form-control"> <label for="cookie_domain' + paramcount + '1" class="control-label">Domain ' + paramcount + '</label> <input type="text" size="10" name="cookie_domain' + paramcount + '" id="cookie-domain-' + paramcount + '" value="" class="form-control"> <label for="admin_cookie_path' + paramcount + '1" c    lass="control-label">Path ' + paramcount + '</label> <input type="text" size="10" name="admin_cookie_path' + paramcount + '" id="admin-cookie    -path-' + paramcount + '" value="" class="form-control"> </li>');
+});
+
+function addCookieParams() {
+  var paramcount = jQuery("ul#cookie-param-list li").length + 1;;
+  jQuery("ul#cookie-param-list").append('<li><label for="cookie_name' + paramcount + '1" class="control-label">Cookie ' + paramcount + '</label> <input type="text" size="10" name="cookie_name' + paramcount + '" id="cookie-name-'+paramcount+'" value="" class="form-control"> <label for="cookie_value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label> <input type="text" size="10" name="cookie_value' + paramcount + '" id="cookie-value-' + paramcount + '" value="" class="form-control"> <label for="cookie_domain' + paramcount + '1" class="control-label">Domain ' + paramcount + '</label> <input type="text" size="10" name="cookie_domain' + paramcount + '" id="cookie-domain-' + paramcount + '" value="" class="form-control"> <label for="cookie_path' + paramcount + '1" class="control-label">Path ' + paramcount + '</label> <input type="text" size="10" name="cookie_path' + paramcount + '" id="cookie-path-' + paramcount + '" value="" class="form-control"> </li>');
+
+}
+
+function addSeleniumParams() {
+  var paramcount = jQuery("ul#selenium-param-list li").length + 1;;
+  jQuery("ul#selenium-param-list").append('<li><label for="sel_cmd' + paramcount + '1" class="control-label">Xpath ' + paramcount + '</label><input type="text" size="10" name="sel_cmd' + paramcount + '" id="sel-cmd" value="" class="form-control"></li>');
+}
+
+function addCredentialsParams() {
+  var paramcount = jQuery("ul#login-param-list li").length + 1;;
+  jQuery("ul#login-param-list").append('<li><label for="param' + paramcount + '" class="control-label">Param ' + paramcount + '</label><input type="text" size="10" name="param' + paramcount + '" value="" class="form-control" id="param-' + paramcount + '"><label for="value' + paramcount + '" class="control-label">Value ' + paramcount + '</label><input type="text" size="10" name="value' + paramcount + '" id="value-' + paramcount + '" value="" class="form-control"></li>');
+}
+
+jQuery("#add-param").click(function() {
+  //alert('Test');
+  if ( jQuery("input[name='login_type']:checked").val() == 'Credentials' ) {
+    addCredentialsParams();
+  }
+  else if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
+    addCookieParams();
+  }
+  else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
+    addSeleniumParams();
+  }
+});
+
+jQuery("#add-param-admin").click(function() {
+  var paramcount = jQuery("ul#admin-param-list li").length + 1;;
+  if ( jQuery("input[name='admin_login_type']:checked").val() == 'Credentials' ) {
+  jQuery("ul#admin-param-list").append('<li><label for="admin_param' + paramcount + '" class="control-label">Param ' + paramcount + '</label><input type="text" size="10" name="admin_param' + paramcount + '" value="" class="form-control" id="admin-param-' + paramcount + '"><label for="admin_value' + paramcount + '" class="control-label">Value ' + paramcount + '</label><input type="text" size="10" name="admin_value' + paramcount + '" id="admin-value-' + paramcount + '" value="" class="form-control"></li>');
+  }
+  else if ( jQuery("input[name='admin_login_type']:checked").val() == 'Cookie' ) {
+  jQuery("ul#admin-param-list").append('<li><label for="admin_cookie_name' + paramcount + '1" class="control-label">Cookie ' + paramcount + '</label> <input type="text" size="10" name="admin_cookie_name' + paramcount + '" id="admin-cookie-name-'+paramcount+'" value="" class="form-control"> <label for="admin_cookie_value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label> <input type="text" size="10" name="admin_cookie_value' + paramcount + '" id="admin-cookie-value-' + paramcount + '" value="" class="form-control"> <label for="admin_cookie_domain' + paramcount + '1" class="control-label">Domain ' + paramcount + '</label> <input type="text" size="10" name="admin_cookie_domain' + paramcount + '" id="admin-cookie-domain-' + paramcount + '" value="" class="form-control"> <label for="admin_cookie_path' + paramcount + '1" class="control-label">Path ' + paramcount + '</label> <input type="text" size="10" name="admin_cookie_path' + paramcount + '" id="admin-cookie-path-' + paramcount + '" value="" class="form-control"> </li>');
+
+  }
+  else if ( jQuery("input[name='admin_login_type']:checked").val() == 'Selenium' ) {
+  jQuery("ul#admin-param-list").append('<li><label for="admin_sel_cmd' + paramcount + '1" class="control-label">Xpath ' + paramcount + '</label><input type="text" size="10" name="admin_sel_cmd' + paramcount + '" id="user-name" value="" class="form-control"></li>');
+
+  }
+});
+
+jQuery("#add-param-non-admin").click(function() {
+  var paramcount = jQuery("ul#non-admin-param-list li").length + 1;;
+  if ( jQuery("input[name='non_admin_login_type']:checked").val() == 'Credentials' ) {
+  jQuery("ul#non-admin-param-list").append('<li><label for="non_admin_param' + paramcount + '" class="control-label">Param ' + paramcount + '</label><input type="text" size="10" name="non_admin_param' + paramcount + '" id="non-admin-param-' + paramcount + '" value="" class="form-control"><label for="value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label><input type="text" size="10" name="non_admin_value' + paramcount + '" id="non-admin-value-' + paramcount + '" value="" class="form-control"></li>');
+  }
+  else if ( jQuery("input[name='non_admin_login_type']:checked").val() == 'Cookie' ) {
+jQuery("ul#non-admin-param-list").append('<li><label for="non_admin_cookie_name' + paramcount + '1" class="control-label">Cookie ' + paramcount + '</label> <input type="text" size="10" name="non_admin_cookie_name' + paramcount + '" id="non-admin-cookie-name-'+paramcount+'" value="" class="form-control"> <label for="non_admin_cookie_value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label> <input type="text" size="10" name="non_admin_cookie_value' + paramcount + '" id="non-admin-cookie-value-' + paramcount + '" value="" class="form-control"> <label for="non_admin_cookie_domain' + paramcount + '1" class="control-label">Domain ' + paramcount + '</label> <input type="text" size="10" name="non_admin_cookie_domain' + paramcount + '" id="non-admin-cookie-domain-' + paramcount + '" value="" class="form-control"> <label for="non_admin_cookie_path' + paramcount + '1" class="control-label">Path ' + paramcount + '</label> <input type="text" size="10" name="non_admin_cookie_path' + paramcount + '" id="non-admin-cookie-path-' + paramcount + '" value="" class="form-control"> </li>');
+
+  }
+  else if ( jQuery("input[name='non_admin_login_type']:checked").val() == 'Selenium' ) {
+  jQuery("ul#non-admin-param-list").append('<li><label for="param' + paramcount + '1" class="control-label">Xpath ' + paramcount + '</label><input type="text" size="10" name="param' + paramcount + '" id="user-name" value="" class="form-control"></li>');
+
+  }
+});
+
+
+jQuery("input[type=radio][name=admin_login_type]").change(function() {
+    jQuery("ul#admin-param-list").empty();
+});
+
+jQuery("input[type=radio][name=non_admin_login_type]").change(function() {
+    jQuery("ul#non-admin-param-list").empty();
+});
+
+jQuery("form#access_form").on('submit', function(e){
+  //alert(jQuery("input#urlid").val().length);
+  //Validate url
+  if(jQuery("input#urlid").val().length == 0) {
+    alert('Please enter URL');
+    return false;
+    e.preventDefault();
+  }
+});
+
+});
+
+</script>
+<script>
+jQuery(document).ready(function() {
+  check_scan_progress();
+});
+
+function check_scan_progress() {
+  var scanid = jQuery("div.broken-link-progress").attr('id');
+  if (scanid) {
+    scanid = scanid.replace("scan-", "");
+  }
+  if(!scanid) {
+    return;
+  }
+  jQuery.get("/scan/a7_status", { scan_id: scanid }, function(response) {
+    if(response[0] && response[1] && response[0].status == 'Finished' && response[1].status == 'Finished' ) {
+      jQuery("span.progress-message").empty();
+
+      jQuery.get("/scan/a7_result", { scan_id: scanid, result_div: 1 }, function(data) {
+        if(data) {
+          jQuery("span.progress-message").html('').append(data);
+        }
+      });
+    }
+    else {
+      setTimeout( function() { check_scan_progress() }, 10000);
+    }
+  });
+}
+
+</script>
+
+
+</div>
+
+</div>
+</div>
+<div id="footer">
+<!-- Powered by <a href="http://perldancer.org/">Dancer2</a> <% dancer_version %> -->
+</div>
+
+<div id="newUser" class="modal fade" tabindex="-1" role="dialog" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Register
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </h5>
+      </div>
+      <form action="/scan/register" method="post" class="form-inline"> 
+      <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-4">
+              First Name:
+            </div>
+            <div class="col-sm-4">
+             <input type="text" size="30" name="first_name">
+            </div>
+           </div>
+          <div class="row">
+            <div class="col-sm-4">
+              Last Name: 
+            </div>
+            <div class="col-sm-4">
+              <input type="text" size="30" name="last_name">
+              </div>
+           </div>
+          <div class="row">
+            <div class="col-sm-4">
+              Email Address (username): 
+            </div>
+            <div class="col-sm-4">
+              <input type="text" size="40" name="email_address"></li>
+ </div>
+           </div>
+          <div class="row">
+            <div class="col-sm-4">
+          Password:
+</div>
+            <div class="col-sm-4">
+          <input size="30" name="password" type="password">
+ </div>
+           </div>
+          <div class="row">
+            <div class="col-sm-4">
+          Retype Password: 
+            </div>
+            <div class="col-sm-4">
+<input size="30" name="password1" type="password">
+</div>
+           </div>
+</div>
+     <div class="modal-footer">
+       <button type="submit" class="btn btn-primary">Register</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     </div>
+     </form>
+   </div>
+ </div>
+</div>
+
+
+<footer>
+    <div class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-collapse collapse" id="footer-body">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Browse Our Library</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Our Partners</a></li>
+                    <li><a href="#">User Review</a></li>
+                    <li><a href="#">Terms &amp; Conditions</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#footer-body">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ul class="footer-bar-btns visible-xs">
+                    <li><a href="#" class="btn" title="History"><i class="fa fa-2x fa-clock-o blue-text"></i></a></li>
+                    <li><a href="#" class="btn" title="Favourites"><i class="fa fa-2x fa-star yellow-text"></i></a></li>
+                    <li><a href="#" class="btn" title="Subscriptions"><i class="fa fa-2x fa-rss-square orange-text"></i></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+
+
+

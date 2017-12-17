@@ -1,0 +1,83 @@
+bootstrapOriginalModal:function(){
+        return(
+            <div id="mainModal" className="modal fade" role="dialog">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close" data-dismiss="modal">&times;</button>
+                            <h4 className="modal-title">Add Login Credentials</h4>
+                        </div>
+                        <div className="modal-body">
+                            <div className="addedLogin">
+                                <ul id="addedLoginList" className="list-unstyled list-inline" style={{display:"none"}}>
+                                </ul>
+                            </div>
+                            <div className="step 1 step1">
+                                Login Type
+                                <div className="alert alert-danger fade in" id="loginTypeError" style={{display:"none"}}>Please select login type</div>
+                                <div className="radio">
+                                    <label><input type="radio" name="login_type" value="Credentials"  />Username / Password</label>
+                                </div>
+                                <div className="radio">
+                                    <label><input type="radio" name="login_type" value="Cookie" />Cookie</label>
+                                </div>
+                                <div className="radio">
+                                    <label><input type="radio" name="login_type" value="Selenium" />Selenium Xpath</label>
+                                </div>
+                            </div>
+
+                            <div className="step 2 step2">
+                                <div className="alert alert-danger fade in" id="successURLError" style={{display:"none"}}>Please enter valid success URL</div>
+                                URL if the user logged in successfully
+                                <input type="text" name="success_url" size="30" value="" className="form-control"/>
+                            </div>
+                            <div className="step 3 step3">
+                                <div id="login-param-div">
+                                    <p>Add Login Parameters: ie the username and password to login to the site. </p>
+                                    <p>Enter the name of the parameter in login form in the param field, Enter the value of the parameter in value field). For example if the username parameter is named username in login form, enter username in param field, and actual username value in value field.</p>
+                                    <ul id="login-param-list" className="list-unstyled">
+                                        <li>
+                                            <label htmlFor="param1" className="control-label">Param 1</label>
+                                            <input type="text" size="10" name="param1" value="" className="form-control" id="param-1"/>
+                                            <label htmlFor="value1" className="control-label">Value 1</label>
+                                            <input type="text" size="10" name="value1" value="" className="form-control" id="value-1"/>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div id="cookie-param-div">
+                                    <ul id="cookie-param-list" className="list-unstyled">
+                                        <li>
+                                            <label htmlFor="cookie_name" className="control-label">Cookie </label>
+                                            <input type="text" size="10" name="cookie_name1" value="" className="form-control" id="admin-cookie-name-"/>
+                                            <label htmlFor="admin_cookie_value" className="control-label">Value </label>
+                                            <input type="text" size="10" name="cookie_value1" value="" className="form-control" id="admin-cookie-value-"/>
+                                            <label htmlFor="admin_cookie_domain" className="control-label">Domain </label>
+                                            <input type="text" size="10" name="cookie_domain1" value="" className="form-control" id="admin-cookie-domain-"/>
+                                            <label htmlFor="admin_cookie_path" className="control-label">Path </label>
+                                            <input type="text" size="10" name="cookie_path1" value="" className="form-control" id="admin-cookie-path-"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="selenium-param-div">
+                                    <ul id="selenium-param-list" className="list-unstyled">
+                                        <li><label htmlFor="sel_cmd11" className="control-label">Xpath 1</label><input type="text" size="10" name="sel_cmd1" id="sel-cmd1" value="" className="form-control"/></li>
+                                    </ul>
+                                </div>
+                                <button type = "button" className = "btn btn-primary" id="add-param">Add More Param</button>
+                                <button type = "button" className = "btn btn-primary" id="add-param-save">Save</button>
+                                <button className="btn btn-primary" id="add-another-login" style={{display:"none"}}>Add Another Login Credentials</button>
+                            </div>
+
+                        </div>
+                        <div className="modal-footer">
+                            <button className="action back btn-primary">Back</button>
+                            <button className="action next btn-primary" id="nextButton">Next</button>
+                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        )
+    },

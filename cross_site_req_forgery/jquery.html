@@ -16,10 +16,10 @@
   <script src="bootstrap.min.js"></script>
   <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
   <link rel="stylesheet" href="font-awesome.min.css">
-    <script src="https://fb.me/react-15.0.1.js"></script>
-    <!--<script src="./react-15.0.1.js"></script>-->
-    <script src="https://fb.me/react-dom-15.0.1.js"></script>
-    <!--<script src="./react-dom-15.0.1.js"></script>-->
+    <!--<script src="https://fb.me/react-15.0.1.js"></script>-->
+    <script src="./react-15.0.1.js"></script>
+    <!--<script src="https://fb.me/react-dom-15.0.1.js"></script>-->
+    <script src="./react-dom-15.0.1.js"></script>
     <!--<script src="browser.min.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 
@@ -66,6 +66,7 @@ div.modal-header {
 div.modal-header button {
    color: white;
 }
+
 </style>
 <script>
 function logout() {
@@ -131,331 +132,7 @@ function logout() {
               </nav>
         </div>
 
-        <div id="root" class="col-sm-9">
-            <div class="form-group">
-                <!--<script>
-
-                    jQuery("#add-param-save").click(function() {
-                      var hash;
-                      var logincount = 1;
-                      if ( jQuery("input[name='login_type']:checked").val() == 'Credentials' ) {
-                        hash = jQuery("ul#login-param-list input, div.step1 input, div.step2 input, div.step3 input, input#urlid, input#urlid1, input[name=userrole], input[name=service]").serialize();
-                      }
-                      else if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
-                        hash = jQuery("ul#cookie-param-list input, div.step1 input, div.step2 input, div.step3 input, input#urlid, input#urlid1, input[name=userrole], input[name=service]").serialize();
-                      }
-                      else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
-                        hash = jQuery("ul#selenium-param-list input, div.step1 input, div.step2 input, div.step3 input, input#urlid, input#urlid1, input[name=userrole], input[name=service]").serialize();
-                      }
-
-                      //store the parameters in div as hidden variables
-                      if ( jQuery("input#login" + logincount + "-login_type").length == 0 ) {
-                        jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-login_type', name: 'login' + logincount + '_login_type', value: jQuery("input[name='login_type']:checked").val() }).appendTo('#login' + logincount);
-                      }
-                      else {
-                        jQuery("input#login" + logincount + "-login_type").val(jQuery("input[name='login_type']:checked").val());
-                      }
-
-                      if ( jQuery("input#login" + logincount + "-userrole").length == 0 ) {
-                        jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-userrole', name: 'login' + logincount + '_userrole', value: jQuery("input[name='userrole']:checked").val() }).appendTo('#login'+ logincount);
-                      }
-                      else {
-                        jQuery("input#login" + logincount + "-userrole").val(jQuery("input[name='userrole']:checked").val());
-                      }
-
-                      if ( jQuery("input#login" + logincount + "-success_url").length == 0 ) {
-                        jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-success_url', name: 'login' + logincount + '_success_url', value: jQuery("input[name='success_url']").val() }).appendTo('#login' + logincount);
-                      }
-                      else {
-                       jQuery("input#login" + logincount + "-success_url").val(jQuery("input[name='success_url']").val());
-                      }
-                      if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
-                        var paramcount = jQuery("ul#cookie-param-list li").length;
-                        var cookieParams = new Array('cookie_name', 'cookie_value', 'cookie_domain', 'cookie_path');
-                        for(var i= 1; i <= paramcount; i++) {
-                          for(var j = 0; j < cookieParams.length; j++) {
-                            if ( jQuery("input#login" + logincount + "-" + cookieParams[j] + i ).length == 0 ) {
-                              jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-'+ cookieParams[j] + i, name: 'login' + logincount + '_' + cookieParams[j] + i, value: jQuery("input[name=" + cookieParams[j] + i +"]").val() }).appendTo('#login' + logincount);
-                            }
-                            else {
-                              jQuery("input#login" + logincount + "-" + cookieParams[j] + i ).val(jQuery("input[name=" + cookieParams[j] + i +"]").val());
-                            }
-                          }
-                        }
-                      }
-                      else if ( jQuery("input[name='login_type']:checked").val() == 'Credentials' ) {
-                        var paramcount = jQuery("ul#login-param-list li").length;
-                        var loginParams = new Array('param', 'value');
-                        for(var i= 1; i <= paramcount; i++) {
-                          for(var j = 0; j < loginParams.length; j++) {
-                            if ( jQuery("input#login" + logincount + "-" + loginParams[j] + i).length == 0 ) {
-                              jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-'+ loginParams[j] + i, name: 'login' + logincount + '_' + loginParams[j] + i, value: jQuery("input[name=" + loginParams[j] + i +"]").val() }).appendTo('#login' + logincount);
-                            }
-                            else {
-                              jQuery("input#login" + logincount + "-" + loginParams[j] + i).val(jQuery("input[name=" + loginParams[j] + i +"]").val());
-                            }
-                          }
-                        }
-                      }
-                      else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
-                        var paramcount = jQuery("ul#selenium-param-list li").length;
-                        for(var i= 1; i <= paramcount; i++) {
-                          if ( jQuery("input#login" + logincount + "-" + "-sel_cmd" + i ).length == 0 ) {
-                            jQuery('<input>').attr({ type: 'hidden', id: 'login' + logincount + '-sel_cmd'+ i, name: 'login' + logincount + '_sel_cmd' + i, value:  jQuery("input[name=sel_cmd" + i).val() }).appendTo('#login' + logincount);
-                          }
-                          else {
-                            jQuery("input#login" + logincount + "-" + "-sel_cmd" + i ).val(jQuery("input[name=sel_cmd" + i).val());
-                          }
-                        }
-                      }
-
-                      crosssite.edit_login = 0;
-                    jQuery.post("/scan/save_loginnew", hash, function(data) {
-                        if ( data.success) {
-                          alert('The Login Credentials are saved');
-                          jQuery("input#urlid1").val(data.scan_id);
-                        }
-                        else {
-                          alert('The Login Credentials are not saved. Please try again.');
-                        }
-                      });
-
-                    });
-
-                    function canClickNext() {
-                      if ( crosssite.currentstep == 1 ) {
-                        return validateLoginType();
-                      }
-                      else if ( crosssite.currentstep == 2 ) {
-                        return validateRedirectURL();
-                      }
-                    }
-
-                    function validateRedirectURL() {
-                     if (is_valid_url(jQuery("input[name=success_url]").val())) {
-                        $('#successURLError').hide();
-                        return true;
-                      }
-                      else {
-                        $('#successURLError').show();
-                        return false;
-                      }
-
-                    }
-
-                    function validateLoginType() {
-                      if (jQuery("input[name='login_type']:checked").val()) {
-                        $('#loginTypeError').hide();
-                        jQuery("#login-param-div").hide();
-                        jQuery("#cookie-param-div").hide();
-                        jQuery("#selenium-param-div").hide();
-                        if ( jQuery("input[name='login_type']:checked").val() == 'Credentials') {
-                          jQuery("#login-param-div").show();
-                        }
-                        else if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
-                          jQuery("#cookie-param-div").show();
-                        }
-                        else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
-                          jQuery("#selenium-param-div").show();
-                        }
-                        return true;
-                      }
-                      else {
-                        $('#loginTypeError').show();
-                        return false;
-                      }
-                    }
-
-                </script>
-
-                <script>
-                jQuery(document).ready(function() {
-                if (jQuery("input#loginrequired").is(':checked')) {
-                  setParams('login1');
-                }
-                });
-
-                function setParams(idValue) {
-                  var loginTypeValue1 = jQuery("input#"+idValue + "-login_type").val();
-                  setLoginType(jQuery("input#"+idValue + "-login_type").val());
-                  setUserRole(jQuery("input#"+idValue + "-userrole").val());
-                  setSuccessURL(jQuery("input#"+idValue + "-success_url").val());
-                  if ( loginTypeValue1 == 'Cookie' ) {
-                    setCookieParams(idValue);
-                  }
-                  else if ( loginTypeValue1 == 'Credentials' ) {
-                    setLoginParams(idValue);
-                  }
-                  else if ( loginTypeValue1 == 'Selenium' ) {
-                    setSeleniumParams(idValue);
-                  }
-                  crosssite.edit_login = idValue.replace('login', '');
-
-                }
-
-                function setSeleniumParams(idValue) {
-                  var selparamcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_sel_cmd"]').length;
-                  for(var i =1; i<= selparamcount; i++ ) {
-                    if ( jQuery("ul#selenium-param-list li").length < i ) addSeleniumParams();
-                    jQuery("input[name=sel_cmd" + i + "]").val(jQuery("input#" + idValue + "-sel_cmd" + i).val());
-                 }
-                }
-
-                function addCookieParams() {
-                  var paramcount = jQuery("ul#cookie-param-list li").length + 1;;
-                  jQuery("ul#cookie-param-list").append('<li><label for="cookie_name' + paramcount + '1" class="control-label">Cookie ' + paramcount + '</label> <input type="text" size="10" name="cookie_name' + paramcount + '" id="cookie-name-'+paramcount+'" value="" class="form-control"> <label for="cookie_value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label> <input type="text" size="10" name="cookie_value' + paramcount + '" id="cookie-value-' + paramcount + '" value="" class="form-control"> <label for="cookie_domain' + paramcount + '1" class="control-label">Domain ' + paramcount + '</label> <input type="text" size="10" name="cookie_domain' + paramcount + '" id="cookie-domain-' + paramcount + '" value="" class="form-control"> <label for="cookie_path' + paramcount + '1" class="control-label">Path ' + paramcount + '</label> <input type="text" size="10" name="cookie_path' + paramcount + '" id="cookie-path-' + paramcount + '" value="" class="form-control"> </li>');
-
-                }
-
-                function addSeleniumParams() {
-                  var paramcount = jQuery("ul#selenium-param-list li").length + 1;;
-                  jQuery("ul#selenium-param-list").append('<li><label for="sel_cmd' + paramcount + '1" class="control-label">Xpath ' + paramcount + '</label><input type="text" size="10" name="sel_cmd' + paramcount + '" id="sel-cmd" value="" class="form-control"></li>');
-                }
-
-                function addCredentialsParams() {
-                  var paramcount = jQuery("ul#login-param-list li").length + 1;;
-                  jQuery("ul#login-param-list").append('<li><label for="param' + paramcount + '" class="control-label">Param ' + paramcount + '</label><input type="text" size="10" name="param' + paramcount + '" value="" class="form-control" id="param-' + paramcount + '"><label for="value' + paramcount + '" class="control-label">Value ' + paramcount + '</label><input type="text" size="10" name="value' + paramcount + '" id="value-' + paramcount + '" value="" class="form-control"></li>');
-                }
-
-                function setLoginParams(idValue) {
-                  var paramcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_param"]').length;
-                  var loginParams = new Array('param', 'value');
-                  for(var i =1; i<= paramcount; i++ ) {
-                    if ( jQuery("ul#login-param-list li").length < i ) addCredentialsParams();
-                    for(var j = 0; j < loginParams.length; j++) {
-                      var paramName = loginParams[j] + i;
-                      var paramValue = jQuery("input#" + idValue + "-" + loginParams[j] + i).val();
-                      jQuery("input[name=" + paramName + "]").val(paramValue);
-                    }
-                  }
-
-                }
-
-                function setCookieParams(idValue) {
-                  var cookieCount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_cookie_name"]').length;
-                  alert(cookieCount);
-                  var cookieParams = new Array('cookie_name', 'cookie_value', 'cookie_domain', 'cookie_path');
-                  for(var i = 1; i <= cookieCount; i++) {
-                    if (jQuery("ul#cookie-param-list li").length < i ) addCookieParams();
-                    for(var j = 0; j < cookieParams.length; j++) {
-                      var paramName = cookieParams[j] + i;
-                      var paramValue = jQuery("input#" + idValue + "-" + cookieParams[j] + i).val();
-                      jQuery("input[name=" + paramName + "]").val(paramValue);
-                    }
-                  }
-                }
-
-
-                function setLoginType(loginTypeValue) {
-                  jQuery("input:radio[name='login_type']").filter("[value="+ loginTypeValue +"]").click();
-                  return true;
-                }
-
-                function setUserRole(userRoleValue) {
-                  jQuery("input:radio[name='userrole']").filter("[value="+ userRoleValue +"]").click();
-                  return true;
-                }
-
-                function setSuccessURL(sucessURLValue){
-                  jQuery("input[name='success_url']").val(sucessURLValue);
-                  return true;
-                }
-
-                </script>
-
-                <script>
-                jQuery(document).ready(function() {
-                  var paramcount = 1;
-                jQuery("#deeplinks").change(function() {
-                  if (this.checked) {
-                    jQuery("#span-deep-level").show();
-                    //alert('Checked');
-                  }
-                  else {
-                    jQuery("#span-deep-level").hide();
-                  }
-
-
-                });
-
-                 if (jQuery("input#loginrequired").is(':checked')) {
-                    jQuery("#mainmodalbutton").show();
-                  }
-                  else {
-                    jQuery("#mainmodalbutton").hide();
-                  }
-
-                jQuery("#add-param").click(function() {
-                  alert('Test');
-                  if ( jQuery("input[name='login_type']:checked").val() == 'Credentials' ) {
-                    addCredentialsParams();
-                  }
-                  else if ( jQuery("input[name='login_type']:checked").val() == 'Cookie' ) {
-                    addCookieParams();
-                  }
-                  else if ( jQuery("input[name='login_type']:checked").val() == 'Selenium' ) {
-                    addSeleniumParams();
-                  }
-                });
-
-                jQuery("#loginrequired").change(function() {
-                  if (this.checked) {
-                    //jQuery("#div-login").show();
-                    jQuery("#mainmodalbutton").show();
-                    //alert('Checked');
-                  }
-                  else {
-                    jQuery("#mainmodalbutton").hide();
-                    jQuery("#div-login-credentials").hide();
-                    jQuery("#div-login-cookie").hide();
-                    //jQuery("#div-login").hide();
-                  }
-                });
-
-                jQuery("input[type=radio][name=login_type]").change(function() {
-                  if (this.value == 'Credentials' ) {
-                    jQuery("#div-login-credentials").show();
-                    //jQuery("#div-login-cookie").hide();
-                  }
-                  else {
-                    jQuery("#div-login-credentials").show();
-                    //jQuery("#div-login-cookie").show();
-                  }
-                });
-
-                });
-
-                function is_valid_url(url) {
-                    return /^(http(s)?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(url);
-                }
-
-                </script>
-
-                <script>
-                    jQuery(document).ready(function() {
-                      check_scan_progress();
-                    });
-
-                    function check_scan_progress() {
-                  var scanid = jQuery("div.broken-link-progress").attr('id');
-                  scanid = scanid.replace("scan-", "");
-                  jQuery.get("/scan/cross_site_progress", { scan_id: scanid }, function(response) {
-                    if(response.status == 'Finished') {
-                      jQuery.get("/scan/cross_site_results", { scan_id: scanid }, function(data) {
-                        if(data.links) {
-                          jQuery.each(data.links, function() { jQuery("#list-"+scanid).append("<li>" + this + "</li>") });
-                        }
-                      });
-                    }
-                    else {
-                      setTimeout( function() { check_scan_progress() }, 10000);
-                    }
-                  });
-                }
-
-                </script>-->
-
-            </div>
+        <div id="root">
         </div>
     </div>
     <div id="footer">
@@ -496,29 +173,29 @@ function logout() {
                 </div>
                 <div class="col-sm-4">
                   <input type="text" size="40" name="email_address"></li>
-     </div>
-               </div>
+                </div>
+                </div>
               <div class="row">
                 <div class="col-sm-4">
-              Password:
-    </div>
-                <div class="col-sm-4">
-              <input size="30" name="password" type="password">
-     </div>
-               </div>
-              <div class="row">
-                <div class="col-sm-4">
-              Retype Password:
+                          Password:
                 </div>
                 <div class="col-sm-4">
-    <input size="30" name="password1" type="password">
-    </div>
+                  <input size="30" name="password" type="password">
+                 </div>
+                </div>
+              <div class="row">
+                <div class="col-sm-4">
+                    Retype Password:
+                </div>
+                <div class="col-sm-4">
+                    <input size="30" name="password1" type="password">
+                </div>
                </div>
-    </div>
-         <div class="modal-footer">
-           <button type="submit" class="btn btn-primary">Register</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         </div>
+            </div>
+             <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             </div>
          </form>
        </div>
      </div>

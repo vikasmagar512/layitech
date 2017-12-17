@@ -15,29 +15,29 @@
                             background-color: #337ab7;
                         }*/
                         div.col-sm-3 {
-                        padding-left: 0px;
-                    }
+                            padding-left: 0px;
+                        }
                         ul#login-ul {
-                        margin-top: 5px;
-                        margin-right: 5px;
-                    }
+                            margin-top: 5px;
+                            margin-right: 5px;
+                        }
 
                         ul#login-ul li {
-                        margin-right: 5px;
-                    }
+                            margin-right: 5px;
+                        }
                         .container-fluid {
-                        padding-right: 15px;
-                        padding-left: 15px;
-                        margin-right: 30px;
-                        margin-left: 20px;
-                        margin-top: 10px;
-                    }
+                            padding-right: 15px;
+                            padding-left: 15px;
+                            margin-right: 30px;
+                            margin-left: 20px;
+                            margin-top: 10px;
+                        }
                         div.modal-body ul#user_registration li {
-                        padding: 5px 0;
-                    }
+                            padding: 5px 0;
+                        }
                         div.modal-body div.row {
-                        padding-bottom: 10px;
-                    }
+                            padding-bottom: 10px;
+                        }
                         div.modal-header {
                         background-color: #337ab7;
                         color: white;
@@ -400,8 +400,7 @@
                             if ( data.success) {
                                 alert('The Login Credentials are saved');
                                 jQuery("input#urlid1").val(data.scan_id);
-                            }
-                            else {
+                            } else {
                                 alert('The Login Credentials are not saved. Please try again.');
                             }
                         });
@@ -626,21 +625,21 @@
                 });
 
                     function check_scan_progress() {
-                    var scanid = jQuery("div.broken-link-progress").attr('id');
-                    scanid = scanid.replace("scan-", "");
-                    jQuery.get("/scan/cross_site_progress", { scan_id: scanid }, function(response) {
-                    if(response.status == 'Finished') {
-                    jQuery.get("/scan/cross_site_results", { scan_id: scanid }, function(data) {
-                    if(data.links) {
-                    jQuery.each(data.links, function() { jQuery("#list-"+scanid).append("<li>" + this + "</li>") });
-                }
-                });
-                }
-                    else {
-                    setTimeout( function() { check_scan_progress() }, 10000);
-                }
-                });
-                }
+                        var scanid = jQuery("div.broken-link-progress").attr('id');
+                        scanid = scanid.replace("scan-", "");
+                        jQuery.get("/scan/cross_site_progress", { scan_id: scanid }, function(response) {
+                            if(response.status == 'Finished') {
+                                jQuery.get("/scan/cross_site_results", { scan_id: scanid }, function(data) {
+                                    if(data.links) {
+                                           jQuery.each(data.links, function() { jQuery("#list-"+scanid).append("<li>" + this + "</li>") });
+                                    }
+                                });
+                            }
+                            else {
+                                setTimeout( function() { check_scan_progress() }, 10000);
+                            }
+                        });
+                    }
 
                 </script>
 

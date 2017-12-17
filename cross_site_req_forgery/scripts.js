@@ -1,4 +1,155 @@
 
+const CookiesComponent = React.createClass({
+    render: function() {
+        let {cookiesArray,onModalInputChange} = this.props
+        return(
+            <div id="cookie-param-div">
+                <ul id="cookie-param-list" className="list-unstyled">
+                    {cookiesArray.map((cookie,index)=>{
+                        return (
+                            <li key={index}>
+                                <label htmlFor={!index ? "cookie_name" : "cookie_name" + (index + 1) + 1} className="control-label">{!index ? "Cookie" : "Cookie " + (index +1) }</label>
+                                <input type="text" size="10" name={"cookie_name"+(index + 1)} value={cookie[`cookie_name${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-name-" : "cookie-name-" + (index + 1) } onChange={onModalInputChange}/>
+                                <label htmlFor={!index ? "admin_cookie_value" : "cookie_value" + (index + 1) + 1 } className="control-label">{!index ? "Value" : "Value " + (index+1) }</label>
+                                <input type="text" size="10" name={"cookie_value"+(index + 1)} value={cookie[`cookie_value${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-value-" : "cookie-value-" + (index + 1) } onChange={onModalInputChange}/>
+                                <label htmlFor={!index ? "admin_cookie_domain" : "cookie_domain" + (index + 1) + 1 } className="control-label">{!index ? "Domain" : "Domain " + (index+1) }</label>
+                                <input type="text" size="10" name={"cookie_domain"+(index + 1)} value={cookie[`cookie_domain${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-domain-" : "cookie-domain-" + (index + 1) } onChange={onModalInputChange}/>
+                                <label htmlFor={!index ? "admin_cookie_path" : "cookie_path" + (index + 1) + 1 } className="control-label">{!index ? "Path" : "Path " + (index+1) }</label>
+                                <input type="text" size="10" name={"cookie_path"+(index + 1)} value={cookie[`cookie_path${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-path-" : "cookie-path-" + (index + 1) } onChange={onModalInputChange}/>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+        )
+    }
+});
+const SeleniumComponent= React.createClass({
+    render:function () {
+        let {seleniumArray,onModalInputChange} = this.props
+        return(
+            <div id="selenium-param-div">
+            <ul id="selenium-param-list" className="list-unstyled">
+                {seleniumArray.map((sel,index)=>{
+                    return (
+                        <li key={index}>
+                            <label htmlFor={"sel_cmd" + (index + 1) + 1} className="control-label">{"Xpath " + (index +1) }</label>
+                            <input type="text" size="10" name={"sel_cmd"+(index + 1)} value={sel[`sel_cmd${(index+1)}`]} className="form-control" id={"sel-cmd" + (index + 1) } onChange={onModalInputChange}/>
+                        </li>
+                    )
+                })}
+            </ul>
+        </div>)
+    }
+})
+const LoginDetailsComponent= React.createClass({
+    render:function () {
+        let {login_type,data,addMoreParams,onModalInputChange,save} = this.props
+        const cookiesArray=data['Cookie']
+        const seleniumArray=data['Selenium']
+        const credentialsArray=data['Credentials']
+        return(
+            <div className="step 4 step4">
+                {login_type === "Credentials" && (<CredentialsComponent credentialsArray={credentialsArray} onModalInputChange = {onModalInputChange}/>)}
+                {login_type === "Cookie" && (<CookiesComponent cookiesArray={cookiesArray} onModalInputChange = {onModalInputChange}/>)}
+                {login_type === "Selenium" && (<SeleniumComponent seleniumArray={seleniumArray} onModalInputChange = {onModalInputChange}/> )}
+                <Button className = {"btn btn-primary"} name={"Add More Param"} id={"add-param"} handleClick={addMoreParams}/>
+                <Button className = {"btn btn-primary"} name={"Save"} id={"add-param-save"} handleClick={save}/>
+                <button className="btn btn-primary" id="add-another-login" style={{display:"none"}}>Add Another Login Credentials</button>
+            </div>)
+    }
+})
+const LoginTypeComponent= React.createClass({
+    render:function () {
+        let {login_type,onModalInputChange} = this.props
+        const loginTypeNames =['Password','Cookie','Xpath'];
+        const loginTypeValues =["Credentials","Cookie","Selenium"];
+        return(
+            <div className="step 2 step1">
+                Login Type
+                {login_type==='' && (
+                    <div className="alert alert-danger fade in" id="loginTypeError">Please select login type</div>)}
+                {loginTypeValues.map((item,index)=>{
+                    return (
+                        <div className="radio" key={index}>
+                            <label>
+                                <input type="radio" name="login_type" value={item}
+                                       checked={login_type===item}
+                                       onChange={onModalInputChange}/>{loginTypeNames[index]}</label>
+                        </div>
+                    )
+                })}
+            </div>
+        )
+    }
+})
+const SuccessURLComponent= React.createClass({
+    render:function () {
+        let {success_url,onModalInputChange} = this.props
+        return(
+            <div className="step 3 step3">
+                {success_url==='' && (<div className="alert alert-danger fade in" id="successURLError" >Please enter valid success URL</div>)}
+                URL if the user logged in successfully
+                {/*<input type="text" name="success_url" size="30" value={this.state.steps[1]['success_url']} className="form-control" onChange={this.onModalInputChange}/>*/}
+                <input type="text" name="success_url" size="30" value={"www.google.com"} className="form-control" onChange={onModalInputChange}/>
+                {/*<input type="text" name="success_url" size="30" value={success_url} className="form-control" onChange={this.onModalInputChange}/>*/}
+            </div>
+        )
+    }
+})
+const UserRoleComponent= React.createClass({
+    render:function () {
+        const userRoleValues=["admin","non_admin","custom_role_1","custom_role_2","no_login"]
+        const userRoleNames =['Admin','Non Admin','Custom Role 1','Custom Role 2','No Login'];
+        let {userrole,onModalInputChange} = this.props
+        return(
+            <div className="step 1 step1">
+                Role for which you are adding Login Credentials
+                {userrole==='' && (
+                    <div className="alert alert-danger fade in" id="loginTypeError">Please select a role</div>)}
+                {userRoleValues.map((item,index)=>{
+                    return (
+                        <div className="radio" key={index}>
+                            <label>
+                                <input type="radio" name="userrole" value={item}
+                                       checked={userrole===item}
+                                       onChange={onModalInputChange}/>{userRoleNames[index]}</label>
+                        </div>
+                    )
+                })}
+            </div>)
+    }
+})
+const CredentialsComponent= React.createClass({
+    render:function () {
+        let {credentialsArray,onModalInputChange} = this.props
+        return(
+            <div id="login-param-div">
+                <p>Add Login Parameters: ie the username and password to login to the site. </p>
+                <p>Enter the name of the parameter in login form in the param field, Enter the value
+                    of the parameter in value field). For example if the username parameter is named
+                    username in login form, enter username in param field, and actual username value
+                    in value field.</p>
+                <ul id="login-param-list" className="list-unstyled">
+                    {credentialsArray.map((cookie, index) => {
+                        return (
+                            <li key={index}>
+                                <label htmlFor={"param" + (index + 1)} className="control-label">{"Param " + (index + 1)}</label>
+                                <input type="text" size="10" name={"param" + (index + 1)} value={cookie['param']}
+                                       className="form-control" onChange={onModalInputChange}
+                                       id={"param-" + (index + 1)}/>
+                                <label htmlFor={"value" + (index + 1)} className="control-label">{"Value " + (index + 1)}</label>
+                                <input type="text" size="10" name={"value" + (index + 1)} value={cookie['value']}
+                                       className="form-control" onChange={onModalInputChange}
+                                       id={"value-" + (index + 1)}/>
+                            </li>)
+                        })
+                    }
+                </ul>
+            </div>
+        )
+    }
+})
 const Button = React.createClass({
     render: function() {
         return (<button className={this.props.className} onClick={this.props.handleClick}>{this.props.name}</button>)
@@ -14,10 +165,12 @@ var Root = React.createClass({
                 login_required:false,
                 url:'',
                 url_id:'',
-                userrole:'no_role',
+                // userrole:'no_role',
                 service:'crosssite',
                 steps:[
                     {
+                        userrole:'no_role',
+                    },{
                         login_type:'',
                     },{
                         success_url:''
@@ -28,7 +181,7 @@ var Root = React.createClass({
                     }
                 ],
                 modalOpen:false,
-                crosssite : { currentstep: 1, limit: 4, edit_login: 0 }
+                crosssite : { currentstep: 1, limit: 5, edit_login: 0 }
         };
     },
     getValues:function(object,itemNumber){
@@ -38,7 +191,6 @@ var Root = React.createClass({
             k[`${prop}${itemNumber}`] = object[prop]
         });
         console.log(k)
-        
         return k
     },
     validateForm() {
@@ -57,31 +209,27 @@ var Root = React.createClass({
         }
     },
     onModalInputChange:function (e) {
-        
         console.log('onModalInputChange')
         console.log('e.target.name ',e.target.name)
         console.log('e.target.value ',e.target.value )
         let {steps,crosssite}=this.state
-        let login_type =steps[0]['login_type']
+        let login_type =steps[1]['login_type']
         console.log('steps are ',steps)
-        if(crosssite.currentstep===3 ){
-            
-            console.log('steps[2][steps[0][login_type',steps[2][login_type])
-            steps[2][login_type].map((item,index)=>{
+        if(crosssite.currentstep===4 ){
+            console.log('steps[3][steps[1][login_type',steps[3][login_type])
+            steps[3][login_type].map((item,index)=>{
                 if(item.hasOwnProperty(e.target.name)){
-                    steps[2][login_type][index][e.target.name]=e.target.value
+                    steps[3][login_type][index][e.target.name]=e.target.value
                 }
             })
-            console.log('step[2]..... ',steps[2])
+            console.log('step[3]..... ',steps[3])
         }else{
-            
             steps[crosssite.currentstep-1][e.target.name]= e.target.value
         }
         console.log('onModalInputChange steps are ',steps)
         this.setState({...this.state,steps:steps})
     },
     openModal:function () {
-        
         this.setState({...this.state,modalOpen:true})
     },
     validateInitialForm:function(){
@@ -120,18 +268,20 @@ var Root = React.createClass({
         }
     },
     canClickNext:function () {
-        return this.state.crosssite.currentstep === 1 ? this.validateLoginType() : this.validateRedirectURL()
+        if ( this.state.crosssite.currentstep === 1 ) return this.validate_login_role();
+        if ( this.state.crosssite.currentstep === 2 ) return this.validateLoginType();
+        if ( this.state.crosssite.currentstep === 3 ) return this.validateRedirectURL();
     },
 
     validateRedirectURL:function () {
-        return this.is_valid_url(this.state.steps[1]['success_url'])
+        return this.is_valid_url(this.state.steps[2]['success_url'])
     },
 
     addMoreParams:function () {
         let steps= [...this.state.steps]
-        let login_type = steps[0]['login_type']
+        let login_type = steps[1]['login_type']
         let map ={'Credentials':Credentials,'Cookie':Cookie,'Selenium':Selenium}
-        steps[2][login_type].push(this.getValues(map[login_type],steps[2][login_type].length+1))
+        steps[3][login_type].push(this.getValues(map[login_type],steps[3][login_type].length+1))
         this.setState({...this.state,steps:steps})
     },
     getObjectArraySerialized:function (arrayOfSimpleObjects) {
@@ -145,7 +295,6 @@ var Root = React.createClass({
         let str=''
         Object.keys(structure).map((item,index)=>{
             if(structure.hasOwnProperty(item)) {
-                // if(['currentstep','limit','edit_login'].indexOf(item)===-1){
                 if(Object.keys(this.state.crosssite).indexOf(item)===-1){
                     str+= `${item}=${structure[item]}&`
                 }
@@ -168,13 +317,13 @@ var Root = React.createClass({
                         
                         console.log('structure[item] ',structure[item])
                         structure[item].map((j,i)=> {
-                            if ([0, 1].indexOf(i) !== -1) {
+                            if ([0,1,2].indexOf(i) !== -1) {
                                 l += this.getObjectSerialized(j)
                             } else {
-                                Object.keys(structure[item][2]).map((CookieCredSel, indo) => {
-                                    if (structure[item][2].hasOwnProperty(CookieCredSel)) {
-                                        if (Array.isArray(structure[item][2][CookieCredSel])) {
-                                            l += this.getObjectArraySerialized(structure[item][2][CookieCredSel])
+                                Object.keys(structure[item][3]).map((CookieCredSel, indo) => {
+                                    if (structure[item][3].hasOwnProperty(CookieCredSel)) {
+                                        if (Array.isArray(structure[item][3][CookieCredSel])) {
+                                            l += this.getObjectArraySerialized(structure[item][3][CookieCredSel])
                                         }
                                     }
                                 })
@@ -216,8 +365,11 @@ var Root = React.createClass({
         });
         xhr.send(hash);
     },
+    validate_login_role:function () {
+        return jQuery("input[name='userrole']:checked").val()
+    },
     validateLoginType:function () {
-        return  (this.state.steps[0]['login_type']!=='')
+        return  (this.state.steps[1]['login_type']!=='')
     },
     is_valid_url:function(url) {
         return /^(http(s)?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(url);
@@ -243,11 +395,11 @@ var Root = React.createClass({
     })*/
     render:function () {
         console.log(this.state)
-        const {url,url_id,userrole,login_required,service,modalOpen,steps,crosssite}=this.state
-        let login_type = steps[0]['login_type']
-        const k =['Password','Cookie','Xpath'];
-
-        
+        const {url,url_id,login_required,service,modalOpen,steps,crosssite}=this.state
+        let userrole= steps[0]['userrole']
+        let login_type = steps[1]['login_type']
+        let success_url= steps[2]['success_url']
+        let cookieSelCred = steps[3]
         return(
             <div className="col-sm-9">
                 <div className="form-group">
@@ -282,97 +434,16 @@ var Root = React.createClass({
                                                 </ul>
                                             </div>
                                             {crosssite.currentstep  === 1 &&
-                                            (<div className="step 1 step1">
-                                                Login Type
-                                                {steps[0].login_type==='' && (
-                                                    <div className="alert alert-danger fade in" id="loginTypeError">Please select login type</div>)}
-                                                {["Credentials","Cookie","Selenium"].map((item,index)=>{
-                                                    return (
-                                                        <div className="radio" key={index}>
-                                                            <label>
-                                                                <input type="radio" name="login_type" value={item}
-                                                                       checked={login_type===item}
-                                                                       onChange={this.onModalInputChange}/>{k[index]}</label>
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div>)}
+                                                (<UserRoleComponent userrole={userrole} onModalInputChange ={this.onModalInputChange}/>)}
                                             {crosssite.currentstep  === 2 &&
-                                            (<div className="step 2 step2">
-                                                {steps[1]['success_url']==='' && (<div className="alert alert-danger fade in" id="successURLError" >Please enter valid success URL</div>)}
-                                                URL if the user logged in successfully
-                                                {/*<input type="text" name="success_url" size="30" value={this.state.steps[1]['success_url']} className="form-control" onChange={this.onModalInputChange}/>*/}
-                                                <input type="text" name="success_url" size="30" value={"www.google.com"} className="form-control" onChange={this.onModalInputChange}/>
-                                            </div>)}
+                                                (<LoginTypeComponent login_type={login_type} onModalInputChange ={this.onModalInputChange}/>)}
                                             {crosssite.currentstep  === 3 &&
-                                            (<div className="step 3 step3">
-                                                {login_type === "Credentials" &&
-                                                (<div id="login-param-div">
-                                                    <p>Add Login Parameters: ie the username and password to login to the site. </p>
-                                                    <p>Enter the name of the parameter in login form in the param field, Enter the value
-                                                        of the parameter in value field). For example if the username parameter is named
-                                                        username in login form, enter username in param field, and actual username value
-                                                        in value field.</p>
-                                                    <ul id="login-param-list" className="list-unstyled">
-                                                        {steps[2]['Credentials'].map((cookie, index) => {
-                                                            return (
-                                                                <li key={index}>
-                                                                    <label htmlFor={"param" + (index + 1)} className="control-label">{"Param " + (index + 1)}</label>
-                                                                    <input type="text" size="10" name={"param" + (index + 1)} value={cookie['param']}
-                                                                           className="form-control" onChange={this.onModalInputChange}
-                                                                           id={"param-" + (index + 1)}/>
-                                                                    <label htmlFor={"value" + (index + 1)} className="control-label">{"Value " + (index + 1)}</label>
-                                                                    <input type="text" size="10" name={"value" + (index + 1)} value={cookie['value']}
-                                                                           className="form-control" onChange={this.onModalInputChange}
-                                                                           id={"value-" + (index + 1)}/>
-                                                                </li>)
-                                                        })
-                                                        }
-                                                        </ul>
-                                                </div>)}
-                                                {login_type === "Cookie" &&
-                                                    (<div id="cookie-param-div">
-                                                        <ul id="cookie-param-list" className="list-unstyled">
-                                                            {steps[2]['Cookie'].map((cookie,index)=>{
-                                                               return (
-                                                                   <li key={index}>
-                                                                       <label htmlFor={!index ? "cookie_name" : "cookie_name" + (index + 1) + 1} className="control-label">{!index ? "Cookie" : "Cookie " + (index +1) }</label>
-                                                                       <input type="text" size="10" name={"cookie_name"+(index + 1)} value={cookie[`cookie_name${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-name-" : "cookie-name-" + (index + 1) } onChange={this.onModalInputChange}/>
-                                                                       <label htmlFor={!index ? "admin_cookie_value" : "cookie_value" + (index + 1) + 1 } className="control-label">{!index ? "Value" : "Value " + (index+1) }</label>
-                                                                       <input type="text" size="10" name={"cookie_value"+(index + 1)} value={cookie[`cookie_value${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-value-" : "cookie-value-" + (index + 1) } onChange={this.onModalInputChange}/>
-                                                                       <label htmlFor={!index ? "admin_cookie_domain" : "cookie_domain" + (index + 1) + 1 } className="control-label">{!index ? "Domain" : "Domain " + (index+1) }</label>
-                                                                       <input type="text" size="10" name={"cookie_domain"+(index + 1)} value={cookie[`cookie_domain${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-domain-" : "cookie-domain-" + (index + 1) } onChange={this.onModalInputChange}/>
-                                                                       <label htmlFor={!index ? "admin_cookie_path" : "cookie_path" + (index + 1) + 1 } className="control-label">{!index ? "Path" : "Path " + (index+1) }</label>
-                                                                       <input type="text" size="10" name={"cookie_path"+(index + 1)} value={cookie[`cookie_path${(index+1)}`]} className="form-control" id={!index ? "admin-cookie-path-" : "cookie-path-" + (index + 1) } onChange={this.onModalInputChange}/>
-                                                                   </li>
-                                                               )
-                                                            })}
-                                                        </ul>
-
-                                                    </div>)}
-                                                {login_type === "Selenium" &&
-                                                (<div id="selenium-param-div">
-                                                    <ul id="selenium-param-list" className="list-unstyled">
-                                                        {steps[2]['Selenium'].map((sel,index)=>{
-                                                            return (
-                                                                <li key={index}>
-                                                                    <label htmlFor={"sel_cmd" + (index + 1) + 1} className="control-label">{"Xpath " + (index +1) }</label>
-                                                                    <input type="text" size="10" name={"sel_cmd"+(index + 1)} value={sel[`sel_cmd${(index+1)}`]} className="form-control" id={"sel-cmd" + (index + 1) } onChange={this.onModalInputChange}
-                                                                    />
-                                                                </li>
-                                                            )
-                                                        })}
-
-                                                    </ul>
-                                                </div>)}
-                                                <Button className = {"btn btn-primary"} name={"Add More Param"} id={"add-param"} handleClick={this.addMoreParams}/>
-                                                <Button className = {"btn btn-primary"} name={"Save"} id={"add-param-save"}  handleClick={this.save}/>
-                                                <button className="btn btn-primary" id="add-another-login" style={{display:"none"}}>Add Another Login Credentials</button>
-                                            </div>)}
-
+                                                (<SuccessURLComponent success_url={success_url} onModalInputChange = {this.onModalInputChange}/>)}
+                                            {crosssite.currentstep  === 4 &&
+                                                (<LoginDetailsComponent login_type={login_type} data = {cookieSelCred} addMoreParams={this.addMoreParams} onModalInputChange={this.onModalInputChange} save={this.save}/>)}
                                         </div>
                                         <div className="modal-footer">
-                                            {(crosssite.currentstep > 1) && <Button className="action back btn-primary" name={"Back"} handleClick={this.backButtonHandle}/>}
+                                            {(crosssite.currentstep > 2) && <Button className="action back btn-primary" name={"Back"} handleClick={this.backButtonHandle}/>}
                                             {((crosssite.currentstep < crosssite.limit) && (crosssite.currentstep !== crosssite.limit)) && <Button className="action next btn-primary" name={"Next"} handleClick={this.nextButtonHandle}/>}
                                             {<button type="button" className="btn btn-default" data-dismiss="modal">Close</button>}
                                             {/*{(this.state.crosssite.currentstep === this.state.crosssite.limit) && <button type="button" className="btn btn-default" data-dismiss="modal">Submit button created by vikas</button>}*/}
@@ -380,8 +451,7 @@ var Root = React.createClass({
                                     </div>
                                 </div>
                             </div>
-                        )
-                        }
+                        )}
                     </div>
                 </div>
             </div>

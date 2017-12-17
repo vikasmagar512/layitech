@@ -114,8 +114,6 @@
 
             <div class="form-group">
 
-
-
                 <form action="" method="post" class="form-inline">
                     <label for="urlid" class="control-label">URL</label>
                     <input type="text" size="50" name="url" id="urlid" value="" placeholder="https://www.google.com" class="form-control">
@@ -216,6 +214,7 @@
                                                     <label for="value1" class="control-label">Value 1</label>
                                                     <input type="text" size="10" name="value1" value="" class="form-control" id="value-1">
                                             </li>
+                                        </ul>
                                     </div>
 
                                     <div id="cookie-param-div">
@@ -481,77 +480,76 @@
 
                     }
 
-                    function setSeleniumParams(idValue) {
-                        var selparamcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_sel_cmd"]').length;
-                        for(var i =1; i<= selparamcount; i++ ) {
-                            if ( jQuery("ul#selenium-param-list li").length < i ) addSeleniumParams();
-                            jQuery("input[name=sel_cmd" + i + "]").val(jQuery("input#" + idValue + "-sel_cmd" + i).val());
+                function addCookieParams() {
+                    var paramcount = jQuery("ul#cookie-param-list li").length + 1;;
+                    jQuery("ul#cookie-param-list").append('<li><label for="cookie_name' + paramcount + '1" class="control-label">Cookie ' + paramcount + '</label> <input type="text" size="10" name="cookie_name' + paramcount + '" id="cookie-name-'+paramcount+'" value="" class="form-control"> <label for="cookie_value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label> <input type="text" size="10" name="cookie_value' + paramcount + '" id="cookie-value-' + paramcount + '" value="" class="form-control"> <label for="cookie_domain' + paramcount + '1" class="control-label">Domain ' + paramcount + '</label> <input type="text" size="10" name="cookie_domain' + paramcount + '" id="cookie-domain-' + paramcount + '" value="" class="form-control"> <label for="cookie_path' + paramcount + '1" class="control-label">Path ' + paramcount + '</label> <input type="text" size="10" name="cookie_path' + paramcount + '" id="cookie-path-' + paramcount + '" value="" class="form-control"> </li>');
+
+                }
+
+                function addSeleniumParams() {
+                    var paramcount = jQuery("ul#selenium-param-list li").length + 1;;
+                    jQuery("ul#selenium-param-list").append('<li><label for="sel_cmd' + paramcount + '1" class="control-label">Xpath ' + paramcount + '</label><input type="text" size="10" name="sel_cmd' + paramcount + '" id="sel-cmd" value="" class="form-control"></li>');
+                }
+
+                function addCredentialsParams() {
+                    var paramcount = jQuery("ul#login-param-list li").length + 1;;
+                    jQuery("ul#login-param-list").append('<li><label for="param' + paramcount + '" class="control-label">Param ' + paramcount + '</label><input type="text" size="10" name="param' + paramcount + '" value="" class="form-control" id="param-' + paramcount + '"><label for="value' + paramcount + '" class="control-label">Value ' + paramcount + '</label><input type="text" size="10" name="value' + paramcount + '" id="value-' + paramcount + '" value="" class="form-control"></li>');
+                }
+
+                function setSeleniumParams(idValue) {
+                    var selparamcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_sel_cmd"]').length;
+                    for(var i =1; i<= selparamcount; i++ ) {
+                        if ( jQuery("ul#selenium-param-list li").length < i ) addSeleniumParams();
+                        jQuery("input[name=sel_cmd" + i + "]").val(jQuery("input#" + idValue + "-sel_cmd" + i).val());
+                    }
+                }
+
+                function setLoginParams(idValue) {
+                    var paramcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_param"]').length;
+                    var loginParams = new Array('param', 'value');
+                    for(var i =1; i<= paramcount; i++ ) {
+                        if ( jQuery("ul#login-param-list li").length < i ) addCredentialsParams();
+                        for(var j = 0; j < loginParams.length; j++) {
+                            var paramName = loginParams[j] + i;
+                            var paramValue = jQuery("input#" + idValue + "-" + loginParams[j] + i).val();
+                            jQuery("input[name=" + paramName + "]").val(paramValue);
                         }
                     }
 
-                    function addCookieParams() {
-                        var paramcount = jQuery("ul#cookie-param-list li").length + 1;;
-                        jQuery("ul#cookie-param-list").append('<li><label for="cookie_name' + paramcount + '1" class="control-label">Cookie ' + paramcount + '</label> <input type="text" size="10" name="cookie_name' + paramcount + '" id="cookie-name-'+paramcount+'" value="" class="form-control"> <label for="cookie_value' + paramcount + '1" class="control-label">Value ' + paramcount + '</label> <input type="text" size="10" name="cookie_value' + paramcount + '" id="cookie-value-' + paramcount + '" value="" class="form-control"> <label for="cookie_domain' + paramcount + '1" class="control-label">Domain ' + paramcount + '</label> <input type="text" size="10" name="cookie_domain' + paramcount + '" id="cookie-domain-' + paramcount + '" value="" class="form-control"> <label for="cookie_path' + paramcount + '1" class="control-label">Path ' + paramcount + '</label> <input type="text" size="10" name="cookie_path' + paramcount + '" id="cookie-path-' + paramcount + '" value="" class="form-control"> </li>');
+                }
 
-                    }
-
-                    function addSeleniumParams() {
-                        var paramcount = jQuery("ul#selenium-param-list li").length + 1;;
-                        jQuery("ul#selenium-param-list").append('<li><label for="sel_cmd' + paramcount + '1" class="control-label">Xpath ' + paramcount + '</label><input type="text" size="10" name="sel_cmd' + paramcount + '" id="sel-cmd" value="" class="form-control"></li>');
-                    }
-
-                    function addCredentialsParams() {
-                        var paramcount = jQuery("ul#login-param-list li").length + 1;;
-                        jQuery("ul#login-param-list").append('<li><label for="param' + paramcount + '" class="control-label">Param ' + paramcount + '</label><input type="text" size="10" name="param' + paramcount + '" value="" class="form-control" id="param-' + paramcount + '"><label for="value' + paramcount + '" class="control-label">Value ' + paramcount + '</label><input type="text" size="10" name="value' + paramcount + '" id="value-' + paramcount + '" value="" class="form-control"></li>');
-                    }
-
-                    function setLoginParams(idValue) {
-                        var paramcount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_param"]').length;
-                        var loginParams = new Array('param', 'value');
-                        for(var i =1; i<= paramcount; i++ ) {
-                            if ( jQuery("ul#login-param-list li").length < i ) addCredentialsParams();
-                            for(var j = 0; j < loginParams.length; j++) {
-                                var paramName = loginParams[j] + i;
-                                var paramValue = jQuery("input#" + idValue + "-" + loginParams[j] + i).val();
-                                jQuery("input[name=" + paramName + "]").val(paramValue);
-                            }
-                        }
-
-                    }
-
-                    function setCookieParams(idValue) {
-                        var cookieCount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_cookie_name"]').length;
-                        alert(cookieCount);
-                        var cookieParams = new Array('cookie_name', 'cookie_value', 'cookie_domain', 'cookie_path');
-                        for(var i = 1; i <= cookieCount; i++) {
-                            if (jQuery("ul#cookie-param-list li").length < i ) addCookieParams();
-                            for(var j = 0; j < cookieParams.length; j++) {
-                                var paramName = cookieParams[j] + i;
-                                var paramValue = jQuery("input#" + idValue + "-" + cookieParams[j] + i).val();
-                                jQuery("input[name=" + paramName + "]").val(paramValue);
-                            }
+                function setCookieParams(idValue) {
+                    var cookieCount = jQuery("div#"+idValue + " input").filter('[name*="' + idValue + '_cookie_name"]').length;
+                    alert(cookieCount);
+                    var cookieParams = new Array('cookie_name', 'cookie_value', 'cookie_domain', 'cookie_path');
+                    for(var i = 1; i <= cookieCount; i++) {
+                        if (jQuery("ul#cookie-param-list li").length < i ) addCookieParams();
+                        for(var j = 0; j < cookieParams.length; j++) {
+                            var paramName = cookieParams[j] + i;
+                            var paramValue = jQuery("input#" + idValue + "-" + cookieParams[j] + i).val();
+                            jQuery("input[name=" + paramName + "]").val(paramValue);
                         }
                     }
+                }
 
+                function setLoginType(loginTypeValue) {
+                    jQuery("input:radio[name='login_type']").filter("[value="+ loginTypeValue +"]").click();
+                    return true;
+                }
 
-                    function setLoginType(loginTypeValue) {
-                        jQuery("input:radio[name='login_type']").filter("[value="+ loginTypeValue +"]").click();
-                        return true;
-                    }
+                function setUserRole(userRoleValue) {
+                    jQuery("input:radio[name='userrole']").filter("[value="+ userRoleValue +"]").click();
+                    return true;
+                }
 
-                    function setUserRole(userRoleValue) {
-                        jQuery("input:radio[name='userrole']").filter("[value="+ userRoleValue +"]").click();
-                        return true;
-                    }
+                function setSuccessURL(sucessURLValue){
+                    jQuery("input[name='success_url']").val(sucessURLValue);
+                    return true;
+                }
 
-                    function setSuccessURL(sucessURLValue){
-                        jQuery("input[name='success_url']").val(sucessURLValue);
-                        return true;
-                    }
+            </script>
 
-                </script>
-
-                <script>
+            <script>
                     jQuery(document).ready(function() {
                     var paramcount = 1;
                     jQuery("#deeplinks").change(function() {
@@ -621,8 +619,8 @@
 
                 <script>
                     jQuery(document).ready(function() {
-                    check_scan_progress();
-                });
+                        check_scan_progress();
+                    });
 
                     function check_scan_progress() {
                         var scanid = jQuery("div.broken-link-progress").attr('id');

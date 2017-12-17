@@ -281,8 +281,44 @@ var Root = React.createClass({
                                                 <ul id="addedLoginList" className="list-unstyled list-inline" style={{display:"none"}}>
                                                 </ul>
                                             </div>
+
                                             {crosssite.currentstep  === 1 &&
                                             (<div className="step 1 step1">
+                                                Role for which you are adding Login Credentials
+                                                {steps[0].login_type==='' && (
+                                                    <div className="alert alert-danger fade in" id="loginTypeError">Please select a role</div>)}
+                                                    {/*<div class="alert alert-danger fade in" id="step1-error" style="display: none;">Please select a role</div>*/}
+                                                {["admin","non_admin","custom_role_1","custom_role_2","no_login"].map((item,index)=>{
+                                                    return (
+                                                        <div className="radio" key={index}>
+                                                            <label>
+                                                                <input type="radio" name="userrole" value={item}
+                                                                       checked={userrole===item}
+                                                                       onChange={this.onModalInputChange}/>{k[index]}</label>
+                                                        </div>
+                                                    )
+                                                })}
+{/*
+                                                <div class="alert alert-danger fade in" id="step1-error" style="display: none;">Please select a role</div>
+                                                <div class="radio">
+                                                    <label><input type="radio" name="userrole" value="admin"/>Admin</label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label><input type="radio" name="userrole" value="non_admin"/>Non Admin</label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label><input type="radio" name="userrole" value="custom_role_1"/>Custom Role 1</label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label><input type="radio" name="userrole" value="custom_role_2"/>Custom Role 2</label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label><input type="radio" name="userrole" value="no_login"/>No Login</label>
+                                                </div>*/}
+                                            </div>)}
+
+                                            {crosssite.currentstep  === 2 &&
+                                            (<div className="step 2 step2">
                                                 Login Type
                                                 {steps[0].login_type==='' && (
                                                     <div className="alert alert-danger fade in" id="loginTypeError">Please select login type</div>)}
@@ -297,15 +333,15 @@ var Root = React.createClass({
                                                     )
                                                 })}
                                             </div>)}
-                                            {crosssite.currentstep  === 2 &&
-                                            (<div className="step 2 step2">
+                                            {crosssite.currentstep  === 3 &&
+                                            (<div className="step 3 step3">
                                                 {steps[1]['success_url']==='' && (<div className="alert alert-danger fade in" id="successURLError" >Please enter valid success URL</div>)}
                                                 URL if the user logged in successfully
                                                 {/*<input type="text" name="success_url" size="30" value={this.state.steps[1]['success_url']} className="form-control" onChange={this.onModalInputChange}/>*/}
                                                 <input type="text" name="success_url" size="30" value={"www.google.com"} className="form-control" onChange={this.onModalInputChange}/>
                                             </div>)}
-                                            {crosssite.currentstep  === 3 &&
-                                            (<div className="step 3 step3">
+                                            {crosssite.currentstep  === 4 &&
+                                            (<div className="step 4 step4">
                                                 {login_type === "Credentials" &&
                                                 (<div id="login-param-div">
                                                     <p>Add Login Parameters: ie the username and password to login to the site. </p>

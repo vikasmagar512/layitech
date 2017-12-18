@@ -26,7 +26,7 @@ const CookiesComponent = React.createClass({
             </div>
         )
     }
-});
+})
 const SeleniumComponent= React.createClass({
     render:function () {
         let {seleniumArray,onModalInputChange} = this.props
@@ -158,7 +158,11 @@ const Button = React.createClass({
         return (<button className={this.props.className} onClick={this.props.handleClick}>{this.props.name}</button>)
     }
 });
-
+/*{
+    Cookie:[this.getValues(Cookie,1)],
+        Credentials:[this.getValues(Credentials,1)],
+    Selenium:[this.getValues(Selenium,1)],
+}*/
 var Root = React.createClass({
     getInitialState:function () {
         return {
@@ -168,19 +172,19 @@ var Root = React.createClass({
                 service:'crosssite',
                 steps:[
                     {
-                        userrole:'no_role',
+                        userrole:new Set('no_role'),
                     },{
-                        login_type:'',
+                        login_type:{},
                     },{
-                        success_url:''
+                        success_url:{},
                     },{
-                        Cookie:[this.getValues(Cookie,1)],
+                        /*Cookie:[this.getValues(Cookie,1)],
                         Credentials:[this.getValues(Credentials,1)],
-                        Selenium:[this.getValues(Selenium,1)],
+                        Selenium:[this.getValues(Selenium,1)],*/
                     }
                 ],
                 modalOpen:false,
-                crosssite : { currentstep: 1, limit: 5, edit_login: 0 }
+                crosssite : { activeRole:'',currentstep: 1, limit: 5, edit_login: 0 }
         };
     },
     getValues:function(object,itemNumber){
@@ -223,7 +227,17 @@ var Root = React.createClass({
             })
             console.log('step[3]..... ',steps[3])
         }else{
-            steps[crosssite.currentstep-1][e.target.name]= e.target.value
+            if(e.target.name==='userrole'){
+                //userrole
+                steps[crosssite.currentstep-1]['userrole'].add(e.target.value)
+            }else {
+                //login_type
+                //success_url
+                steps[crosssite.currentstep-1][e.target.name][crosssite.activeRole]=e.target.value
+            }
+            steps[0]['userrole'].add(e.target.value)
+            steps[1]['login_type']['activeRole']= e.target.value
+            steps[2]['success_url']['activeRole']= e.target.value
         }
         console.log('onModalInputChange steps are ',steps)
         this.setState({...this.state,steps:steps})

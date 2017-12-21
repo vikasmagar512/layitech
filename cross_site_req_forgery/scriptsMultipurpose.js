@@ -3,7 +3,7 @@ const Credentials = {param: '', value: ''};
 const Selenium = {sel_cmd: ''};
 
 const CookiesComponent = React.createClass({
-    render: function() {
+    render: function(){
         let {cookiesArray,onModalInputChange} = this.props
         return(
             <div id="cookie-param-div">
@@ -28,7 +28,7 @@ const CookiesComponent = React.createClass({
     }
 })
 const SeleniumComponent= React.createClass({
-    render:function () {
+    render:function(){
         let {seleniumArray,onModalInputChange} = this.props
         return(
             <div id="selenium-param-div">
@@ -46,7 +46,7 @@ const SeleniumComponent= React.createClass({
     }
 })
 const LoginDetailsComponent= React.createClass({
-    render:function () {
+    render:function(){
         let {login_type,data,addMoreParams,onModalInputChange,save} = this.props
         const cookiesArray=data['Cookie']
         const seleniumArray=data['Selenium']
@@ -63,7 +63,7 @@ const LoginDetailsComponent= React.createClass({
     }
 })
 const LoginTypeComponent= React.createClass({
-    render:function () {
+    render:function(){
         let {login_type,onModalInputChange} = this.props
         const loginTypeNames =['Password','Cookie','Xpath'];
         const loginTypeValues =["Credentials","Cookie","Selenium"];
@@ -87,7 +87,7 @@ const LoginTypeComponent= React.createClass({
     }
 })
 const SuccessURLComponent= React.createClass({
-    render:function () {
+    render:function(){
         let {success_url,onModalInputChange} = this.props
         return(
             <div className="step 3 step3">
@@ -101,22 +101,20 @@ const SuccessURLComponent= React.createClass({
     }
 })
 const UserRoleComponent= React.createClass({
-    render:function () {
-        const userRoleValues=["admin","non_admin","custom_role_1","custom_role_2","no_login"]
-        const userRoleNames =['Admin','Non Admin','Custom Role 1','Custom Role 2','No Login'];
-        let {activeRole,onModalInputChange} = this.props
+    render:function(){
+        let {activeRole,userRoleValues,onModalInputChange} = this.props
         return(
             <div className="step 1 step1">
                 Role for which you are adding Login Credentials
                 {activeRole==='' && (
                     <div className="alert alert-danger fade in" id="loginTypeError">Please select a role</div>)}
-                {userRoleValues.map((item,index)=>{
+                {Object.keys(userRoleValues).map((item,index)=>{
                     return (
                         <div className="radio" key={index}>
                             <label>
                                 <input type="radio" name="userrole" value={item}
                                        checked={activeRole===item}
-                                       onChange={onModalInputChange}/>{userRoleNames[index]}</label>
+                                       onChange={onModalInputChange}/>{userRoleValues[item]}</label>
                         </div>
                     )
                 })}
@@ -124,7 +122,7 @@ const UserRoleComponent= React.createClass({
     }
 })
 const CredentialsComponent= React.createClass({
-    render:function () {
+    render:function(){
         let {credentialsArray,onModalInputChange} = this.props
         return(
             <div id="login-param-div">
@@ -153,18 +151,9 @@ const CredentialsComponent= React.createClass({
         )
     }
 })
-const Button = React.createClass({
-    render: function() {
-        return (<button className={this.props.className} onClick={this.props.handleClick}>{this.props.name}</button>)
-    }
-});
-/*{
-    Cookie:[this.getValues(Cookie,1)],
-        Credentials:[this.getValues(Credentials,1)],
-    Selenium:[this.getValues(Selenium,1)],
-}*/
+const Button =(props)=> (<button className={props.className} onClick={props.handleClick}>{props.name}</button>)
 var Root = React.createClass({
-    getInitialState:function () {
+    getInitialState:function(){
         return {
             login_required:false,
             url:'',
@@ -174,20 +163,34 @@ var Root = React.createClass({
                 {
                     userrole:new Set(),
                 },{
-                    login_type:{},
+                    login_type:{
+                        // 'admin':'Cookie'
+                    },
                 },{
-                    success_url:{},
+                    success_url:{
+                        // 'admin':'www.google.com'
+                    },
                 },{
-                    /*Cookie:[this.getValues(Cookie,1)],
-                    Credentials:[this.getValues(Credentials,1)],
-                    Selenium:[this.getValues(Selenium,1)],*/
+                    /*'admin':{
+                        Cookie:[this.getValues(Cookie,1)],
+                        Credentials:[this.getValues(Credentials,1)],
+                        Selenium:[this.getValues(Selenium,1)],
+                    }*/
                 }
             ],
             modalOpen:false,
             crosssite : { activeRole:'',currentstep: 1, limit: 5, edit_login: 0 }
         };
     },
-
+    componentDidMount:function () {
+        $(this.refs.modal.getDOMNode()).modal({
+            backdrop: "static",
+            show: false
+        });
+    },
+    componentWillUnmount: function () {
+        $(this.refs.modal.getDOMNode()).off();
+    },
     getValues:function(object,itemNumber){
         let k ={}
         Object.keys(object).map(prop => {
@@ -201,32 +204,19 @@ var Root = React.createClass({
         return true
     },
 
-    handleChange :function (e) {
-        if(e.target.name==='login_required'){
-            this.setState({
-                [e.target.name]: !this.state[e.target.name]
-            });
-        }else{
-            this.setState({
-                [e.target.name]: e.target.value
-            });
-        }
+    handleChange :function(e){
+        this.setState({
+            [e.target.name]: e.target.name==='login_required' ? !this.state[e.target.name] : e.target.value
+        });
     },
 
     formAndAddStep3Object:function(){
-        var k = {
-            Cookie:[this.getValues(Cookie,1)],
-            Credentials:[this.getValues(Credentials,1)],
-            Selenium:[this.getValues(Selenium,1)]
-        }
-        console.log('k is ',k)
-        return k
-        /*steps3={
-            [role]:k
-        }
-        return steps3*/
-    },
-    onModalInputChange:function (e) {
+        return {
+        Cookie:[this.getValues(Cookie,1)],
+        Credentials:[this.getValues(Credentials,1)],
+        Selenium:[this.getValues(Selenium,1)]
+    }},
+    onModalInputChange:function(e){
         console.log('onModalInputChange')
         console.log('e.target.name ',e.target.name)
         console.log('e.target.value ',e.target.value )
@@ -263,8 +253,31 @@ var Root = React.createClass({
         console.log('onModalInputChange steps are ',steps)
         this.setState({...this.state,steps:steps,crosssite:crosssite})
     },
-    openModal:function () {
-        this.setState({...this.state,modalOpen:true})
+    openModal:function(){
+        if (!(this.is_valid_url(this.state.url))) {
+            alert('Enter a valid URL to scan');
+            return false;
+        }
+        console.log('url validated')
+        // $(this.refs.modal.getDOMNode()).modal("show");
+        // this.setState({...this.state,modalOpen:true})
+    },
+    closeModal:function(){
+        console.log('close event');
+        this.setState({...this.state,modalOpen:false,crosssite:{...this.state.crosssite,currentstep:1}})
+        //current = 1; Not Needed, otherwise back button wont work
+    },
+    show: function () {
+        alert('show')
+        if (!(this.is_valid_url(this.state.url))) {
+            alert('Enter a valid URL to scan');
+            return false;
+        }
+        $(this.refs.modal.getDOMNode()).modal("show");
+    },
+    hide: function () {
+        alert('hide')
+        $(this.refs.modal.getDOMNode()).modal("hide");
     },
     validateInitialForm:function(){
         if (!(this.is_valid_url(this.state.url))) {
@@ -301,20 +314,20 @@ var Root = React.createClass({
             this.setState({...this.state,crosssite:{...this.state.crosssite,currentstep:currentstep + 1}})
         }
     },
-    canClickNext:function () {
+    canClickNext:function(){
         debugger
         if ( this.state.crosssite.currentstep === 1 ) return this.validate_login_role();
         if ( this.state.crosssite.currentstep === 2 ) return this.validateLoginType();
         if ( this.state.crosssite.currentstep === 3 ) return this.validateRedirectURL();
     },
 
-    validateRedirectURL:function () {
+    validateRedirectURL:function(){
         let activeRole = this.state.crosssite.activeRole
         debugger
         return this.is_valid_url(this.state.steps[2]['success_url'][activeRole])
     },
 
-    addMoreParams:function () {
+    addMoreParams:function(){
         let steps= [...this.state.steps]
         let activeRole = this.state.crosssite.activeRole
         let login_type = steps[1]['login_type'][activeRole]
@@ -322,14 +335,14 @@ var Root = React.createClass({
         steps[3][activeRole][login_type].push(this.getValues(map[login_type],steps[3][activeRole][login_type].length+1))
         this.setState({...this.state,steps:steps})
     },
-    getObjectArraySerialized:function (arrayOfSimpleObjects) {
+    getObjectArraySerialized:function(arrayOfSimpleObjects){
         let str = '';
         arrayOfSimpleObjects.map((item)=>{
             str+=this.getObjectSerialized(item)
         })
         return str
     },
-    getObjectSerialized:function (structure) {
+    getObjectSerialized:function(structure){
         let str=''
         Object.keys(structure).map((item,index)=>{
             if(structure.hasOwnProperty(item)) {
@@ -340,7 +353,7 @@ var Root = React.createClass({
         )
         return str
     },
-    serialize:function (structure) {
+    serialize:function(structure){
         let l =''
         Object.keys(structure).map((item,index)=>{
             if(structure.hasOwnProperty(item)) {
@@ -373,7 +386,7 @@ var Root = React.createClass({
         })
         return l
     },
-    save:function () {
+    save:function(){
         alert('save')
         let state= {...this.state}
         let hash = this.serialize(state);
@@ -404,26 +417,18 @@ var Root = React.createClass({
         });
         xhr.send(hash);
     },
-    validate_login_role:function () {
-        return this.state.crosssite.activeRole !==''
-    },
-    validateLoginType:function () {
+    validate_login_role:function(){return this.state.crosssite.activeRole !==''},
+    validateLoginType:function(){
         let activeRole = this.state.crosssite.activeRole
         debugger
         return  (this.state.steps[1]['login_type'][activeRole]!=='')
     },
-    is_valid_url:function(url) {
-        return /^(http(s)?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(url);
-    },
+    is_valid_url:function(url){return (/^(http(s)?:\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(url))},
     /*handleSubmit :function (event) {
         event.preventDefault();
     },*/
-    closeModal:function () {
-        console.log('close event');
-        this.setState({...this.state,crosssit:{...this.state.crosssite,currentstep:1}})
-        //current = 1; Not Needed, otherwise back button wont work
-    },
-    /*$('#mainModal').on('hidden.bs.modal', function () {
+
+    /*$('#mainModal').on('hidden.bs.modal', function(){
         // widget      = $(".step");
         // widget.not(':eq(0)').hide();
         // let steps={...this.state.steps}
@@ -434,15 +439,17 @@ var Root = React.createClass({
         this.setState({...this.state,steps:steps})
         //current = 1; Not Needed, otherwise back button wont work
     })*/
-    EditLoginCredentials:function () {
-
+    EditLoginCredentials:function(e){
+        let {crosssite}=this.state
+        let userrole=e.target.value
+        // crosssite.activeRole = userrole
+        // this.crosssite.currentstep = 4
+        this.setState({...this.state,crosssite:{...crosssite,activeRole : userrole ,currentstep : 4 }})
     },
-    render:function () {
+    render:function(){
         console.log(this.state)
         const userRoleValues={admin:'Admin',non_admin:'Non Admin',custom_role_1:'Custom Role 1',custom_role_2:'Custom Role 2',no_login:'No Login'}
-        const userRoleNames =['Admin','Non Admin','Custom Role 1','Custom Role 2','No Login'];
         const {url,url_id,login_required,service,modalOpen,steps,crosssite}=this.state
-        // let userrole= steps[0]['userrole']
         let activeRole = crosssite.activeRole
         let login_type = activeRole ? steps[1]['login_type'][crosssite.activeRole] : ''
         let success_url = activeRole ? steps[2]['success_url'][crosssite.activeRole] : ''
@@ -474,20 +481,24 @@ var Root = React.createClass({
                         <h>{login_required}</h>
                         <input type="checkbox" label={login_required} name="login_required" id="loginrequired" checked={login_required} onChange={ this.handleChange }/>Login Required?
                         {login_required && (
-                            <button type="button" className="btn btn-primary" id="mainmodalbutton" data-toggle="modal" data-target="#mainModal" onClick={ this.openModal }>Add Login Credentials</button>
+                            <button type="button" className="btn btn-primary" onClick={ this.show }>Add Login Credentials</button>
+                            // <button type="button" className="btn btn-primary" id="mainmodalbutton" data-toggle="modal" data-target="#mainModal" onClick={ this.openModal }>Add Login Credentials</button>
                         )}
                         <input type="submit" className="btn btn-primary" value="Scan"/>
                     </form>
                     {/*{modalOpen ? this.getModal() : null}*/}
                     <div>
                         {/*{modalOpen ? this.bootstrapOriginalModal() : null}*/}
-                        {modalOpen &&
+                        {/*{modalOpen &&*/
+                            // <div id="mainModal" className="modal fade" tabIndex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog">
+                        }
                         (
-                            <div id="mainModal" className="modal fade" tabIndex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog">
+
+                            <div id="mainModal" ref="modal" className="modal fade">
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                            <button type="button" className="close" data-dismiss="modal" onClick={this.closeModal}>&times;</button>
                                             <h4 className="modal-title">Add Login Credentials</h4>
                                         </div>
                                         <div className="modal-body">
@@ -495,13 +506,13 @@ var Root = React.createClass({
                                                 <ul id="addedLoginList" className="list-unstyled list-inline">
                                                     {[...steps[0]['userrole']].map((item,index)=>
                                                         (<li key={index}>
-                                                            <button type = "button" className = "btn btn-primary edit_login" onClick={this.EditLoginCredentials}>{`Edit ${userRoleValues[item]} Login Credentials`}</button>
+                                                            <Button className = {"btn btn-primary edit_login"} name={`Edit ${userRoleValues[item]} Login Credentials`} handleClick={this.EditLoginCredentials}/>
                                                         </li>)
                                                     )}
                                                 </ul>
                                             </div>
                                             {crosssite.currentstep  === 1 &&
-                                                (<UserRoleComponent activeRole={activeRole} onModalInputChange ={this.onModalInputChange}/>)}
+                                                (<UserRoleComponent activeRole={activeRole} userRoleValues={userRoleValues} onModalInputChange ={this.onModalInputChange}/>)}
                                             {crosssite.currentstep  === 2 &&
                                                 (<LoginTypeComponent login_type={login_type} onModalInputChange ={this.onModalInputChange}/>)}
                                             {crosssite.currentstep  === 3 &&
@@ -518,7 +529,8 @@ var Root = React.createClass({
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        )
+                        { /*}*/}
                     </div>
                 </div>
             </div>

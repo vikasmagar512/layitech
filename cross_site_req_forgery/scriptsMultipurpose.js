@@ -183,13 +183,13 @@ var Root = React.createClass({
         };
     },
     componentDidMount:function () {
-        $(this.refs.modal.getDOMNode()).modal({
+        /*$(ReactDOM.findDOMNode(this.refs.modal)).modal({
             backdrop: "static",
             show: false
-        });
+        });*/
     },
     componentWillUnmount: function () {
-        $(this.refs.modal.getDOMNode()).off();
+        $(ReactDOM.findDOMNode(this.refs.modal)).off();
     },
     getValues:function(object,itemNumber){
         let k ={}
@@ -233,7 +233,7 @@ var Root = React.createClass({
             })
             console.log('step[3]..... ',steps[3])
         }else{
-            if(e.target.name==='userrole'){
+            if(e.target.name === 'userrole'){
                 let selectedUserrole = e.target.value
                 if(!(steps[0]['userrole'].has(selectedUserrole))){
                     steps[0]['userrole'].add(e.target.value)
@@ -273,11 +273,11 @@ var Root = React.createClass({
             alert('Enter a valid URL to scan');
             return false;
         }
-        $(this.refs.modal.getDOMNode()).modal("show");
+        $(ReactDOM.findDOMNode(this.refs.modal)).modal("show");
     },
     hide: function () {
         alert('hide')
-        $(this.refs.modal.getDOMNode()).modal("hide");
+        $(ReactDOM.findDOMNode(this.refs.modal)).modal("hide");
     },
     validateInitialForm:function(){
         if (!(this.is_valid_url(this.state.url))) {

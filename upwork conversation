@@ -1,1 +1,0 @@
-I have converted a page and made the component for the rest two. I found there are too many dialog stages. I was unaware of that much of work. I thought it would be 3 dialogs. However there are changes in the other files that you will have to make, in order to set up the store, when the first javascript file loads.
